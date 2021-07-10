@@ -1,0 +1,25 @@
+.header {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(180deg, rgba(0, 193, 232, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    font-family: "Fredoka One", sans-serif;
+    height: 100px;
+    display: flex;
+    width: 100%;
+}
+
+.head-title {
+    position: absolute;
+    font-size: 5em;
+    color: white;
+    text-shadow: #ccc 1px 1px 2px;
+    text-align: center;
+    width: 100%;
+}
+
+.head-profile {
+    width: 100%;
+    font-size: 2em;
+    text-align: end;
+    margin-right: 20px;
+    align-self: center;
+}

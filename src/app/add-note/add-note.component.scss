@@ -1,0 +1,31 @@
+.content{
+    width: 800px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: end;
+}
+
+.btn-container > button{
+    width: 100px;
+    height: 40px;
+    margin-top: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+}
+
+.btn-container > button[type="submit"]{
+    background-color: #1E90FF;
+    color: white;
+
+}
+.btn-container > button[type="button"]{
+    background-color: #DC143C;
+    color: white;
+
+}

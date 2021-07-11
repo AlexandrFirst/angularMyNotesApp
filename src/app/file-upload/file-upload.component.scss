@@ -1,0 +1,22 @@
+.file-input-content {
+    margin-bottom: 20px;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-upload{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    width: fit-content;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 4px 3px 5px #ccc;
+}
+
+.file-upload button{
+    margin-left: 10px;
+}
+

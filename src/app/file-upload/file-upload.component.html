@@ -1,0 +1,29 @@
+<div class="file-input-content">
+    <input type="file" class="file-input" 
+    [accept]="requiredFileType"
+    (change)="onFileSelected($event)" #fileUpload>
+
+    <div class="file-upload">
+
+        {{fileName || "Title image(Not uploaded yet.)"}}
+
+        <button mat-mini-fab class="upload-btn" (click)="fileUpload.click()" type="button">
+            <mat-icon>attach_file</mat-icon>
+        </button>
+        <button class="cancel-upload-photo-btn" type="button" *ngIf="this.isFileChosen" (click)="resetImage()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+
+    <!-- <div class="progress">
+
+        <mat-progress-bar class="progress-bar" mode="determinate"
+                          [value]="uploadProgress" *ngIf="uploadProgress">
+      
+        </mat-progress-bar>
+      
+        <mat-icon class="cancel-upload" (click)="cancelUpload()" 
+                  *ngIf="uploadProgress">delete_forever</mat-icon>
+      
+      </div> -->
+</div>

@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 
 body{
     margin: 0px;
+    background-color: rgba(159, 160, 161, 1);
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

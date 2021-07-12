@@ -7,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotesComponent implements OnInit {
 
+
+  isSidebarActive = false;
+
+  toggleSidebar(){
+    this.isSidebarActive = !this.isSidebarActive;
+  }
+
   constructor() { }
 
   ngOnInit(): void {

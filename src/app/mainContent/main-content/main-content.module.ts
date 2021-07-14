@@ -18,8 +18,6 @@ import { FileUploadComponent } from 'src/app/file-upload/file-upload.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { AdminAnaliticComponent } from '../admin-analitic/admin-analitic.component';
 
-
-
 @NgModule({
   declarations: [
     NotesComponent,

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
@@ -12,10 +12,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFileUploaderModule } from "angular-file-uploader";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
-import {MatIconModule} from '@angular/material/icon';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { MainContentViewComponent } from './mainContent/main-content-view/main-content-view.component';
+
 
 @NgModule({
   declarations: [
@@ -23,11 +24,11 @@ import { MainContentViewComponent } from './mainContent/main-content-view/main-c
     FooterComponent,
     HeaderComponent,
     NavBarComponent,
-    MainContentViewComponent,
+    MainContentViewComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule, 
+    HttpClientModule,
     AngularEditorModule,
     FormsModule,
     ReactiveFormsModule,
@@ -37,9 +38,16 @@ import { MainContentViewComponent } from './mainContent/main-content-view/main-c
     MatProgressBarModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      {path: 'main', component: MainContentViewComponent, loadChildren: () => import('./mainContent/main-content/main-content.module').then(m => m.MainContentModule)},
-      {path: '', redirectTo: '/main/notes', pathMatch: 'full'},
-      {path: '**', redirectTo: '/main/notes', pathMatch: 'full'}
+      {
+        path: 'register',
+        loadChildren: () => import('./registrationContent/registration/registration.module').then(m => m.RegistrationModule)
+      },
+      {
+        path: 'main', component: MainContentViewComponent,
+        loadChildren: () => import('./mainContent/main-content/main-content.module').then(m => m.MainContentModule)
+      },
+      { path: '', redirectTo: '/register/register', pathMatch: 'full' },
+      { path: '**', redirectTo: '/register/register', pathMatch: 'full' }
     ])
   ],
   providers: [],

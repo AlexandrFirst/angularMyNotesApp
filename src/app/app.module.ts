@@ -6,26 +6,24 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
 import { AppComponent } from './app.component';
-import { NotesComponent } from './notes/notes.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
-import { AddNoteComponent } from './add-note/add-note.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFileUploaderModule } from "angular-file-uploader";
-import { FileUploadComponent } from './file-upload/file-upload.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { MainContentViewComponent } from './mainContent/main-content-view/main-content-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotesComponent,
     FooterComponent,
     HeaderComponent,
-    AddNoteComponent,
-    FileUploadComponent
+    NavBarComponent,
+    MainContentViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,13 +35,12 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSliderModule,
     MatIconModule,
     MatProgressBarModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([
-      {path: 'addNotes', component: AddNoteComponent},
-      {path: 'notes', component: NotesComponent},
-      {path: '', redirectTo: '/notes', pathMatch: 'full'},
-      {path: '**', component: NotesComponent}
-    ]),
-    BrowserAnimationsModule
+      {path: 'main', component: MainContentViewComponent, loadChildren: () => import('./mainContent/main-content/main-content.module').then(m => m.MainContentModule)},
+      {path: '', redirectTo: '/main/notes', pathMatch: 'full'},
+      {path: '**', redirectTo: '/main/notes', pathMatch: 'full'}
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]

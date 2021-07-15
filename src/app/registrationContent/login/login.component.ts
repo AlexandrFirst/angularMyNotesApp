@@ -12,4 +12,19 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  passType = "password"
+  showPassword = false;
+
+  showHidePass(){
+    if(!this.showPassword){
+      this.passType = "text"
+      
+    }
+    else{
+      this.passType = "password"
+    }
+
+    this.showPassword = !this.showPassword;
+  }
+
 }

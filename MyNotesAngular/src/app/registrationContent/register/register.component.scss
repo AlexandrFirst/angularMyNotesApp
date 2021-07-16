@@ -1,3 +1,21 @@
+@import url('../../resources/util.css');
+
+@font-face {
+    font-family: Oswald-Regular;
+    src: url("../../resources/fonts/oswald/Oswald-Regular.ttf");
+}
+
+@font-face {
+    font-family: Oswald-Medium;
+    src: url("../../resources/fonts/oswald/Oswald-Medium.ttf");
+}
+
+@font-face {
+    font-family: Oswald-Bold;
+    src: url("../../resources/fonts/oswald/Oswald-Bold.ttf");
+}
+
+
 .page-content {
 	width: 100%;
 	margin:  0 auto;
@@ -172,4 +190,21 @@ input:-moz-placeholder { /* Firefox 18- */
 	.form-v6-content .form-detail .form-row input {
 	    width: 89%;
 	}
+}
+
+.bo1 {
+    border-bottom: 1px solid #929292;
+}
+
+.txt3 {
+    font-family: Oswald-Regular;
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.hov1:hover {
+    border-bottom: 1px solid #111111;
+    color: #111111;
 }

@@ -1,0 +1,122 @@
+[
+    {
+      "Name": "Juliette",
+      "Mail": "lynnesantiago@magneato.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Lucas",
+      "Mail": "lolitaraymond@cytrex.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Bonner",
+      "Mail": "richmondward@nitracyr.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Celeste",
+      "Mail": "maldonadoconner@parleynet.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Castillo",
+      "Mail": "wellsvance@zipak.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Murphy",
+      "Mail": "jeniferrivera@entropix.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Barrett",
+      "Mail": "naomigalloway@lingoage.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Rosario",
+      "Mail": "calliedale@unia.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Buck",
+      "Mail": "nortoncarroll@sustenza.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Rios",
+      "Mail": "pearliewalsh@nurplex.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "April",
+      "Mail": "wigginscabrera@velos.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Gonzalez",
+      "Mail": "maribelsingleton@slax.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Therese",
+      "Mail": "britneybright@emtrac.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Valeria",
+      "Mail": "lilypeters@adornica.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Amelia",
+      "Mail": "housestewart@marvane.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Mendoza",
+      "Mail": "nievessmall@prismatic.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Stacy",
+      "Mail": "luannschneider@honotron.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Mollie",
+      "Mail": "lynnfinley@exoplode.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Beverley",
+      "Mail": "buchananedwards@roughies.com",
+      "Password": 12345,
+      "Role": "User"
+    },
+    {
+      "Name": "Dona",
+      "Mail": "robinsonburton@centree.com",
+      "Password": 12345,
+      "Role": "User"
+    }
+  ]

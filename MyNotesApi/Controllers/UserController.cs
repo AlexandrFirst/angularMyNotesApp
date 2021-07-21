@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MyNotesApi.DataContext;
+using MyNotesApi.DTOs;
 using MyNotesApi.Helpers;
 
 namespace MyNotesApi.Controllers
@@ -13,25 +15,24 @@ namespace MyNotesApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly MyDataContext dbConext;
+        private readonly IMapper mapper;
 
-        public UserController(MyDataContext dbConext)
+        public UserController(MyDataContext dbConext, IMapper mapper)
         {
             this.dbConext = dbConext;
+            this.mapper = mapper;
         }
 
 
-        [HttpGet]
-        [Authorize(Role="User")]
-        public async Task<IActionResult> GetAllUsers()
+        [HttpPost("registration")]
+        public async Task<IActionResult> RegisterUser(UserRegister newUser)
         {
-            List<User> users = new List<User>();
+            User user = mapper.Map<User>(newUser);
 
-            await Task.Run(() =>
-            {
-                users = dbConext.Users.ToList();
-            });
+            await dbConext.Users.AddAsync(user);
+            await dbConext.SaveChangesAsync();
 
-            return Ok(users);
+            return Ok("Success");
         }
     }
 }

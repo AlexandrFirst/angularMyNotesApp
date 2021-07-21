@@ -3,25 +3,26 @@
         <div class="form-left">
             <img src="../../../assets/img/bgImage.png" alt="form">
         </div>
-        <form class="form-detail">
+        <form class="form-detail" [formGroup]="registrationForm" (ngSubmit)="OnRegister()">
             <h2>Register Form</h2>
             <div class="form-row">
-                <input type="text" name="full-name" id="full-name" class="input-text" placeholder="Your Name" required>
+                <input type="text" name="full-name" id="full-name" class="input-text" placeholder="Your Name"
+                    formControlName="name">
             </div>
             <div class="form-row">
                 <input type="text" name="your-email" id="your-email" class="input-text" placeholder="Email Address"
-                    required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}">
-            </div>
-            <div class="form-row">
-                <input [attr.type]="passType" name="password" id="password" class="input-text" placeholder="Password"
-                    required>
-                <span> <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'"
-                        (click)="showHidePass()"></i></span>
+                    formControlName="mail">
 
             </div>
             <div class="form-row">
+                <input [attr.type]="passType" name="password" id="password" class="input-text" placeholder="Password"
+                    formControlName="password">
+                <span> <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'"
+                        (click)="showHidePass()"></i></span>
+            </div>
+            <div class="form-row">
                 <input [attr.type]="passType" name="comfirm-password" id="comfirm-password" class="input-text"
-                    placeholder="Comfirm Password" required>
+                    placeholder="Comfirm Password" formControlName="confirmPassword">
             </div>
             <div class="form-row-last">
                 <input type="submit" name="register" class="register" value="Register">
@@ -29,6 +30,61 @@
         </form>
     </div>
 </div>
+
+<div *ngIf="form.invalid && (form.dirty || form.touched)" 
+    style="
+    display: flex; margin-bottom: 30px; 
+    flex-direction: column; 
+    background-color: rgba(255, 72, 0, 0.226);
+    padding: 15px 0;
+    margin-right: 20px;
+    margin-left: 20px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 30px;
+    line-height: 40px;
+    color: red;">
+    <div *ngIf="name.invalid && (form.dirty || form.touched)" style="align-self: center;">
+        <div *ngIf="name.errors?.required">
+            Name can't be empty
+        </div>
+        <div *ngIf="name.errors?.minlength">
+            Name is invalid length. Current length is
+            {{name.errors?.minlength.actualLength}}/{{name.errors?.minlength.requiredLength}}
+        </div>
+        <div *ngIf="name.errors?.maxlength">
+            Name is invalid length. Current length is
+            {{name.errors?.maxlength.actualLength}}/{{name.errors?.maxlength.requiredLength}}
+        </div>
+    </div>
+    <div *ngIf="mail.invalid && (mail.dirty || mail.touched)" style="align-self: center;">
+        <div *ngIf="mail.errors?.required">
+            Mail can't be empty
+        </div>
+        <div *ngIf="mail.errors?.email">
+            Wrong email format
+        </div>
+    </div>
+    <div *ngIf="password.invalid && (password.dirty || password.touched)" style="align-self: center; text-align: center;">
+        <div *ngIf="password.errors?.required">
+            Password can't be empty
+        </div>
+        <div *ngIf="password.errors?.minlength">
+            Password should be  {{password.errors?.minlength.actualLength}}/{{password.errors?.minlength.requiredLength}}
+        </div>
+        <div *ngIf="password.errors?.maxlength">
+            Password should be  {{password.errors?.minlength.actualLength}}/{{password.errors?.maxlength.requiredLength}}
+        </div>
+        <div *ngIf="password.errors?.pattern">
+            Password should be 8 to 30 characters, small and capital letters and special symbols
+        </div>
+    </div>
+    <div *ngIf="confirmPassword.dirty || confirmPassword.touched" style="align-self: center; text-align: center;">
+        <div *ngIf="form.errors.passwordConfirmation">
+            Passwords should be the same
+        </div>
+    </div>
+</div>
+
 <div class="flex-col-c">
     <span class="txt2 p-b-10">
         Have an account?

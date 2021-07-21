@@ -52,6 +52,8 @@ namespace MyNotesApi
         {
             services.AddCors();
 
+            services.AddAutoMapper(typeof(Startup));
+            
             services.AddControllers();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));

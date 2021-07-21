@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { MainContentViewComponent } from './mainContent/main-content-view/main-content-view.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { MainContentViewComponent } from './mainContent/main-content-view/main-c
     MatIconModule,
     MatProgressBarModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     RouterModule.forRoot([
       {
         path: 'register',

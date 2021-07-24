@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { LoadingSignService } from 'src/app/loading-sign/loading-sign.service';
 import { NotificationMessage, NotificationType } from 'src/app/Models/NotificationMessage';
+import { UserRegistration } from 'src/app/Models/UserRegistration';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { UserService } from 'src/app/Services/user.service';
 import { paswordConfirmValidator } from 'src/app/Validators/paswordConfirmValidator';
@@ -14,28 +17,30 @@ import { paswordConfirmValidator } from 'src/app/Validators/paswordConfirmValida
 export class RegisterComponent implements OnInit {
 
   constructor(private userSerice: UserService,
-              private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private loadingSignService: LoadingSignService,
+    private router: Router) { }
 
   showPassword = false;
   passType = "password"
 
   registrationForm = new FormGroup({
-    name: new FormControl('',[
+    name: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(20)
     ]),
-    mail: new FormControl('',[
+    mail: new FormControl('', [
       Validators.required,
       Validators.email
     ]),
-    password: new FormControl('',[
+    password: new FormControl('', [
       Validators.required,
       Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'),
       Validators.minLength(8),
       Validators.maxLength(30)
     ]),
-    confirmPassword: new FormControl('',[
+    confirmPassword: new FormControl('', [
       Validators.required
     ])
   }, paswordConfirmValidator);
@@ -43,23 +48,23 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  get name(){
+  get name() {
     return this.registrationForm.get('name');
   }
 
-  get mail(){
+  get mail() {
     return this.registrationForm.get('mail');
   }
-  
-  get password(){
+
+  get password() {
     return this.registrationForm.get('password');
   }
 
-  get confirmPassword(){
+  get confirmPassword() {
     return this.registrationForm.get('confirmPassword');
   }
 
-  get form(){
+  get form() {
     return this.registrationForm;
   }
 
@@ -75,20 +80,43 @@ export class RegisterComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  OnRegister(){
-    if(this.registrationForm.valid){
-      console.log(this.registrationForm.value)
-      this.notificationService.sendMessage({
-        message: "verifieng...",
-        type: NotificationType.info
+  OnRegister() {
+    this.router.navigate(['/login']);
+
+    if (this.registrationForm.valid) {
+
+      this.loadingSignService.activate();
+
+
+      this.userSerice.RegisterUser({
+        Mail: this.mail.value,
+        Name: this.name.value,
+        Password: this.password.value
+      } as UserRegistration).subscribe(success => {
+        console.log(success);
+
+        this.notificationService.sendMessage({
+          message: "You are registered",
+          type: NotificationType.success
+        });
+        this.router.navigate(['/register/login']);
+      }, (error: Error) => {
+        this.notificationService.sendMessage({
+          message: "Something went wrong! Try again",
+          type: NotificationType.error
+        });
+
+        console.log("Somthing went wrong " + error.message)
+      }, () => {
+        this.loadingSignService.deactivate();
       });
+
     }
-    else{
+    else {
       this.notificationService.sendMessage({
         message: "Fill in form correctly",
         type: NotificationType.error
       });
     }
   }
-
 }

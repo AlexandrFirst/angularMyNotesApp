@@ -22,10 +22,6 @@ export class UserService {
   }
 
   RegisterUser(userToRegister: UserRegistration) {
-    this.client.SendData('User/registration', userToRegister).subscribe(success => {
-      console.log("You are registered")
-    }, error => {
-      console.log("Somthing went wrong " + error)
-    })
+    return this.client.SendData('User/registration', userToRegister);
   }
 }

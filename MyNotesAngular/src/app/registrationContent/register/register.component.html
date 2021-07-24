@@ -31,9 +31,9 @@
     </div>
 </div>
 
-<div *ngIf="form.invalid && (form.dirty || form.touched)" 
-    style="
-    display: flex; margin-bottom: 30px; 
+<div style="
+    display: flex; 
+    margin-bottom: 30px; 
     flex-direction: column; 
     background-color: rgba(255, 72, 0, 0.226);
     padding: 15px 0;
@@ -42,7 +42,8 @@
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 30px;
     line-height: 40px;
-    color: red;">
+    color: red;
+    padding: 0">
     <div *ngIf="name.invalid && (form.dirty || form.touched)" style="align-self: center;">
         <div *ngIf="name.errors?.required">
             Name can't be empty
@@ -79,7 +80,7 @@
         </div>
     </div>
     <div *ngIf="confirmPassword.dirty || confirmPassword.touched" style="align-self: center; text-align: center;">
-        <div *ngIf="form.errors.passwordConfirmation">
+        <div *ngIf="form.invalid && form.errors.passwordConfirmation">
             Passwords should be the same
         </div>
     </div>

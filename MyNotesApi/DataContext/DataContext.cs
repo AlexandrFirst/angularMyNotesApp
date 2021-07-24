@@ -11,9 +11,19 @@ namespace MyNotesApi.DataContext
         public virtual DbSet<Repost> Reposts { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-        public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
+        // public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
+        // {
+        //     this.ChangeTracker.LazyLoadingEnabled = false;
+        // }
+        public MyDataContext()
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder contextOptions)
+        {
+            contextOptions.UseSqlServer("Server = (localdb)\\MSSQLLocalDB; Database = MyNoteDB; Trusted_Connection = True;");
+            //contextOptions.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = KinderDatabase; Trusted_Connection = True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

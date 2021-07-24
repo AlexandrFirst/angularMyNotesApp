@@ -126,7 +126,7 @@ namespace MyNotesApi.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Mail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -138,6 +138,10 @@ namespace MyNotesApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Mail")
+                        .IsUnique()
+                        .HasFilter("[Mail] IS NOT NULL");
 
                     b.ToTable("Users");
                 });

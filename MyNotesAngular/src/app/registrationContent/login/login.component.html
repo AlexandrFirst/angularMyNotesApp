@@ -1,4 +1,5 @@
-<div class="limiter">
+
+<div class="limiter" style="z-index: -1;">
     <div class="container-login100">
         <div class="wrap-login100 p-t-90 p-b-30">
             <form class="login100-form validate-form">
@@ -29,11 +30,12 @@
                     <span class="focus-input100"></span>
                 </div>
 
-                <div class="wrap-input100 validate-input m-b-20" data-validate = "Please enter password">
+                <div class="wrap-input100 validate-input m-b-20" data-validate="Please enter password">
                     <span class="btn-show-pass">
-                        <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'" (click)="showHidePass()"></i>
+                        <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'"
+                            (click)="showHidePass()"></i>
                     </span>
-                    <input class="input100"  [attr.type]="passType" name="pass" placeholder="Password" required>
+                    <input class="input100" [attr.type]="passType" name="pass" placeholder="Password" required>
                     <span class="focus-input100"></span>
                 </div>
 
@@ -42,7 +44,7 @@
                         Login
                     </button>
                 </div>
-                
+
                 <div class="flex-col-c p-t-224">
                     <span class="txt2 p-b-10">
                         Don’t have an account?
@@ -52,7 +54,7 @@
                         Sign up now
                     </a>
                 </div>
-                
+
             </form>
         </div>
     </div>

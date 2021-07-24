@@ -15,8 +15,12 @@ export class HttpService {
   }
 
   SendData(url, body) {
+
+    console.log(this.baseUrl + url);
+    console.log(body);
+
     const token = this.GetToken();
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token });
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token});
 
     return this.client.post(this.baseUrl + url, body, { headers });
   }

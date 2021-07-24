@@ -10,8 +10,8 @@ using MyNotesApi.DataContext;
 namespace MyNotesApi.Migrations
 {
     [DbContext(typeof(MyDataContext))]
-    [Migration("20210716104105_Init")]
-    partial class Init
+    [Migration("20210724221023_INit")]
+    partial class INit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,7 +128,7 @@ namespace MyNotesApi.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Mail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -136,7 +136,14 @@ namespace MyNotesApi.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Mail")
+                        .IsUnique()
+                        .HasFilter("[Mail] IS NOT NULL");
 
                     b.ToTable("Users");
                 });

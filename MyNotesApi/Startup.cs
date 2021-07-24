@@ -1,21 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyNotesApi.DataContext;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MyNotesApi.ServiceProtos;
 using MyNotesApi.Services;
 using MyNotesApi.Helpers;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyNotesApi
 {
@@ -28,9 +25,9 @@ namespace MyNotesApi
             Configuration = configuration;
 
 
-            var optionsBuilder = new DbContextOptionsBuilder<MyDataContext>();
+            var optionsBuilder = new DbContextOptionsBuilder();
             using (MyDataContext dbContext
-                        = new MyDataContext(optionsBuilder.UseSqlServer(Configuration["ConnectionString:NoteDB"]).Options))
+                        = new MyDataContext())
             {
                 if (dbContext.Users.Count() == 0)
                 {
@@ -53,13 +50,13 @@ namespace MyNotesApi
             services.AddCors();
 
             services.AddAutoMapper(typeof(Startup));
-            
+
             services.AddControllers();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
-
+            // services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
+            services.AddDbContext<MyDataContext>();
             services.AddScoped<IAuthService, AuthService>();
 
         }

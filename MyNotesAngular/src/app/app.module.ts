@@ -17,6 +17,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { MainContentViewComponent } from './mainContent/main-content-view/main-content-view.component';
 import { ToastrModule } from 'ngx-toastr';
+import { LoadingSignComponent } from './loading-sign/loading-sign.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ToastrModule } from 'ngx-toastr';
     FooterComponent,
     HeaderComponent,
     NavBarComponent,
-    MainContentViewComponent
+    MainContentViewComponent,
+    LoadingSignComponent
   ],
   imports: [
     BrowserModule,

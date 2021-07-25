@@ -92,30 +92,32 @@ export class RegisterComponent implements OnInit {
         Mail: this.mail.value,
         Name: this.name.value,
         Password: this.password.value
-      } as UserRegistration).subscribe(success => {
-        console.log(success);
+      } as UserRegistration).subscribe(
+        success => {
+          console.log(success);
 
-        this.notificationService.sendMessage({
-          message: "You are registered",
-          type: NotificationType.success
+          this.notificationService.sendMessage({
+            message: "You are registered",
+            type: NotificationType.success
+          });
+          this.router.navigate(['/register/login']);
+        }, error => {
+          this.notificationService.sendMessage({
+            message: error.error.Message,
+            type: NotificationType.error
+          } as NotificationMessage)
+
+          this.loadingSignService.deactivate();
+
+          throw error;
+        }, () => {
+          this.loadingSignService.deactivate();
         });
-        this.router.navigate(['/register/login']);
-      }, (error: Error) => {
-        this.notificationService.sendMessage({
-          message: "Something went wrong! Try again",
-          type: NotificationType.error
-        });
-
-        console.log("Somthing went wrong " + error.message)
-      }, () => {
-        this.loadingSignService.deactivate();
-      });
-
     }
     else {
       this.notificationService.sendMessage({
         message: "Fill in form correctly",
-        type: NotificationType.error
+        type: NotificationType.warning
       });
     }
   }

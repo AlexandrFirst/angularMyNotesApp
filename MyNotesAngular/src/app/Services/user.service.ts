@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UserLogin } from '../Models/UserLogin';
 import { UserRegistration } from '../Models/UserRegistration';
 import { HttpService } from './http.service';
 
@@ -9,19 +10,31 @@ import { HttpService } from './http.service';
 export class UserService {
 
   private isUserRegistered = false;
+  constructor(private client: HttpService) { }
 
   get isRegistered() {
+    console.log("isRegistered getter")
+    if (this.client.GetToken()) {
+      this.isUserRegistered = true;
+    }
+    else {
+      this.isUserRegistered = false;
+    }
     return this.isUserRegistered;
   }
 
-  constructor(private client: HttpService) {
-
-    if (client.GetToken()) {
-      this.isUserRegistered = true;
+  get userName(){
+    if(this.isRegistered){
+      return this.client.GetName();
     }
+    return "No valid name";
   }
 
   RegisterUser(userToRegister: UserRegistration) {
     return this.client.SendData('User/registration', userToRegister);
+  }
+
+  LoginUser(userToLogin: UserLogin) {
+    return this.client.SendData('Login/authenticate', userToLogin);
   }
 }

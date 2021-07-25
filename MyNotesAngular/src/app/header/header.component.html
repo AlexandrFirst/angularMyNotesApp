@@ -3,6 +3,7 @@
         My Notes
     </div>
     <div class="head-profile">
-        Hello, Alex
+        <div *ngIf="userService.isRegistered;else notRegUser">{{userService.userName}}</div>
+        <ng-template #notRegUser style="color: crimson;">Register please</ng-template>
     </div>
 </div>

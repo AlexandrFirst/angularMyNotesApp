@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,6 +18,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { MainContentViewComponent } from './mainContent/main-content-view/main-content-view.component';
 import { ToastrModule } from 'ngx-toastr';
 import { LoadingSignComponent } from './loading-sign/loading-sign.component';
+import { MyErrorHandlerService } from './Services/my-error-handler.service';
+
 
 
 @NgModule({
@@ -54,7 +56,10 @@ import { LoadingSignComponent } from './loading-sign/loading-sign.component';
       { path: '**', redirectTo: '/register/register', pathMatch: 'full' }
     ])
   ],
-  providers: [],
+  providers: [
+    MyErrorHandlerService,
+    {provide: ErrorHandler, useClass: MyErrorHandlerService}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

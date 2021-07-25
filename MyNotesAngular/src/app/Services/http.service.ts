@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UserData } from '../Models/AuthResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,11 @@ export class HttpService {
   constructor(private client: HttpClient) { }
 
   GetToken(){
-    return localStorage.getItem("token");
+    return localStorage.getItem(UserData.UserToken);
+  }
+
+  GetName(){
+    return localStorage.getItem(UserData.UserName);
   }
 
   SendData(url, body) {

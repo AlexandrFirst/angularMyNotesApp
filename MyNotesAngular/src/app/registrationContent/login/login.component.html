@@ -2,7 +2,7 @@
 <div class="limiter" style="z-index: -1;">
     <div class="container-login100">
         <div class="wrap-login100 p-t-90 p-b-30">
-            <form class="login100-form validate-form">
+            <form class="login100-form validate-form" [formGroup]="form" (submit)="onSubmit()">
                 <span class="login100-form-title p-b-40">
                     Login
                 </span>
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter email: ex@abc.xyz">
-                    <input class="input100" type="text" name="email" placeholder="Email" required>
+                    <input class="input100" type="text" name="email" placeholder="Email" formControlName="email">
                     <span class="focus-input100"></span>
                 </div>
 
@@ -35,7 +35,7 @@
                         <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'"
                             (click)="showHidePass()"></i>
                     </span>
-                    <input class="input100" [attr.type]="passType" name="pass" placeholder="Password" required>
+                    <input class="input100" [attr.type]="passType" name="pass" placeholder="Password" formControlName="password">
                     <span class="focus-input100"></span>
                 </div>
 

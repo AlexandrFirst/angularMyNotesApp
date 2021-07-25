@@ -13,6 +13,7 @@ using MyNotesApi.Services;
 using MyNotesApi.Helpers;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using MyNotesApi.Helpers.ExceptionHandler;
 
 namespace MyNotesApi
 {
@@ -69,11 +70,18 @@ namespace MyNotesApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            // app.ConfigureExceptionHandler();
+            
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            
+            
+            
+            app.UseRouting();
 
             app.UseMiddleware<JwtMiddleware>();
+
 
             // app.UseAuthentication();
             // app.UseAuthorization();

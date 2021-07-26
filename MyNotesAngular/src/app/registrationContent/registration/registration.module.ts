@@ -16,10 +16,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild([
-      {path: 'login', component: LoginComponent},
-      {path: 'register', component: RegisterComponent},
-      {path: '', component: LoginComponent},
-      {path: '**', component: LoginComponent}
+      { path: 'login', component: LoginComponent},
+      { path: 'register', component: RegisterComponent },
+      { path: '', component: LoginComponent },
+      { path: '**', component: LoginComponent }
     ])
   ]
 })

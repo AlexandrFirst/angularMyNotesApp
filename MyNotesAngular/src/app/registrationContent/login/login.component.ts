@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoadingSignService } from 'src/app/loading-sign/loading-sign.service';
 import { AuthReponse, saveAuthResponse } from 'src/app/Models/AuthResponse';
 import { NotificationMessage, NotificationType } from 'src/app/Models/NotificationMessage';
@@ -14,9 +15,11 @@ import { UserService } from 'src/app/Services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private notificationService: NotificationService,
+  constructor(
+    private notificationService: NotificationService,
     private userService: UserService,
-    private loadingSignService: LoadingSignService) { }
+    private loadingSignService: LoadingSignService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loadingSignService.deactivate();
@@ -58,7 +61,8 @@ export class LoginComponent implements OnInit {
         console.log(success);
 
         saveAuthResponse(success);
-
+        this.router.navigate(['main']);
+        
       }, error => {
         this.notificationService.sendMessage({
           message: error.error.message,

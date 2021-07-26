@@ -13,7 +13,6 @@ export class UserService {
   constructor(private client: HttpService) { }
 
   get isRegistered() {
-    console.log("isRegistered getter")
     if (this.client.GetToken()) {
       this.isUserRegistered = true;
     }

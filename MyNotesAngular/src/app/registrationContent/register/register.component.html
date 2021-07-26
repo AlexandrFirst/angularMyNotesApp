@@ -14,11 +14,11 @@
                     formControlName="mail">
 
             </div>
-            <div class="form-row">
+            <div class="form-row" style="display: flex;">
                 <input [attr.type]="passType" name="password" id="password" class="input-text" placeholder="Password"
                     formControlName="password">
-                <span> <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'"
-                        (click)="showHidePass()"></i></span>
+               <i class="fa fa" [ngClass]="showPassword ? 'fa-eye':'fa-eye-slash'" style="position: absolute; right: 0;"
+                        (click)="showHidePass()"></i>
             </div>
             <div class="form-row">
                 <input [attr.type]="passType" name="comfirm-password" id="comfirm-password" class="input-text"

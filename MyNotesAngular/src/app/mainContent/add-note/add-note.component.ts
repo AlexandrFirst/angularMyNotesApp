@@ -102,7 +102,7 @@ export class AddNoteComponent implements OnInit {
   }
 
   cancelBtnClick(){
-    this.router.navigate(['notes']);
+    this.router.navigate(['main']);
     console.log('herte')
   }
 

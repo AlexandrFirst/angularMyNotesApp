@@ -19,6 +19,8 @@ import { MainContentViewComponent } from './mainContent/main-content-view/main-c
 import { ToastrModule } from 'ngx-toastr';
 import { LoadingSignComponent } from './loading-sign/loading-sign.component';
 import { MyErrorHandlerService } from './Services/my-error-handler.service';
+import { MainContentGuard } from './route-guard/main-content.guard';
+import { LoginGuard } from './route-guard/login.guard';
 
 
 
@@ -46,11 +48,13 @@ import { MyErrorHandlerService } from './Services/my-error-handler.service';
     RouterModule.forRoot([
       {
         path: 'register',
-        loadChildren: () => import('./registrationContent/registration/registration.module').then(m => m.RegistrationModule)
+        loadChildren: () => import('./registrationContent/registration/registration.module').then(m => m.RegistrationModule),
+        canActivateChild:[LoginGuard]
       },
       {
         path: 'main', component: MainContentViewComponent,
-        loadChildren: () => import('./mainContent/main-content/main-content.module').then(m => m.MainContentModule)
+        loadChildren: () => import('./mainContent/main-content/main-content.module').then(m => m.MainContentModule),
+        canActivateChild: [MainContentGuard] 
       },
       { path: '', redirectTo: '/register/register', pathMatch: 'full' },
       { path: '**', redirectTo: '/register/register', pathMatch: 'full' }

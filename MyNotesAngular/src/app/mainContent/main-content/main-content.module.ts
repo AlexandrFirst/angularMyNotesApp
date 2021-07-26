@@ -17,6 +17,7 @@ import { AddNoteComponent } from '../add-note/add-note.component';
 import { FileUploadComponent } from 'src/app/file-upload/file-upload.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { AdminAnaliticComponent } from '../admin-analitic/admin-analitic.component';
+import { SubMainContentGuard } from 'src/app/route-guard/sub-main-content.guard';
 
 @NgModule({
   declarations: [

@@ -18,6 +18,7 @@ import { FileUploadComponent } from 'src/app/file-upload/file-upload.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { AdminAnaliticComponent } from '../admin-analitic/admin-analitic.component';
 import { SubMainContentGuard } from 'src/app/route-guard/sub-main-content.guard';
+import {MatProgressBarModule} from '@angular/material/progress-bar'
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { SubMainContentGuard } from 'src/app/route-guard/sub-main-content.guard'
     MatSliderModule,
     MatIconModule,
     AngularEditorModule,
+    MatProgressBarModule,
     RouterModule.forChild([
       {path: 'notes', component: NotesComponent},
       {path: 'add', component: AddNoteComponent},

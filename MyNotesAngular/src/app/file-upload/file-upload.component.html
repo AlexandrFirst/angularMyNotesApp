@@ -1,7 +1,5 @@
 <div class="file-input-content">
-    <input type="file" class="file-input" 
-    [accept]="requiredFileType"
-    (change)="onFileSelected($event)" #fileUpload>
+    <input type="file" class="file-input" [accept]="requiredFileType" (change)="onFileSelected($event)" #fileUpload>
 
     <div class="file-upload">
 
@@ -15,15 +13,13 @@
         </button>
     </div>
 
-    <!-- <div class="progress">
+    <div class="progress">
 
-        <mat-progress-bar class="progress-bar" mode="determinate"
-                          [value]="uploadProgress" *ngIf="uploadProgress">
-      
+        <mat-progress-bar class="progress-bar" mode="determinate" [value]="uploadProgress" *ngIf="uploadProgress">
+
         </mat-progress-bar>
-      
-        <mat-icon class="cancel-upload" (click)="cancelUpload()" 
-                  *ngIf="uploadProgress">delete_forever</mat-icon>
-      
-      </div> -->
+
+        <mat-icon class="cancel-upload" (click)="cancelUpload()" *ngIf="uploadProgress">delete_forever</mat-icon>
+
+    </div>
 </div>

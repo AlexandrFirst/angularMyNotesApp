@@ -29,11 +29,12 @@ export class FileUploadComponent implements ControlValueAccessor {
 
   isFileChosen = false;
 
+
   onChange: (_: any) => void = (_: any) => { };
 
   onTouched: () => void = () => { };
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   updateChanges() {
     this.onChange(this.file);
@@ -63,37 +64,37 @@ export class FileUploadComponent implements ControlValueAccessor {
       this.isFileChosen = true;
       this.fileName = this.file.name;
       this.updateChanges()
-      //   const upload$ = this.http.post("/api/thumbnail-upload", formData, {
-      //     reportProgress: true,
-      //     observe: 'events'
-      //   })
-      //     .pipe(
-      //       finalize(() => this.reset())
-      //     );
+      const upload$ = this.http.post("/api/thumbnail-upload", this.file, {
+        reportProgress: true,
+        observe: 'events'
+      })
+        .pipe(
+          finalize(() => this.reset())
+        );
 
-      //   this.uploadSub = upload$.subscribe(event => {
-      //     if (event.type == HttpEventType.UploadProgress) {
-      //       this.uploadProgress = Math.round(100 * (event.loaded / event.total));
-      //       console.log(this.uploadProgress)
-      //     }
-      //   })
+      this.uploadSub = upload$.subscribe(event => {
+        if (event.type == HttpEventType.UploadProgress) {
+          this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+          console.log(this.uploadProgress)
+        }
+      })
     }
   }
 
-  resetImage(){
+  resetImage() {
     this.file = null;
     this.fileName = null;
     this.isFileChosen = false;
 
   }
 
-  // cancelUpload() {
-  //   this.uploadSub.unsubscribe();
-  //   this.reset();
-  // }
+  cancelUpload() {
+    this.uploadSub.unsubscribe();
+    this.reset();
+  }
 
-  // reset() {
-  //   this.uploadProgress = null;
-  //   this.uploadSub = null;
-  // }
+  reset() {
+    this.uploadProgress = null;
+    this.uploadSub = null;
+  }
 }

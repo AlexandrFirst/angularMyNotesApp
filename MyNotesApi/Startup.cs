@@ -14,6 +14,7 @@ using MyNotesApi.Helpers;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using MyNotesApi.Helpers.ExceptionHandler;
+using Microsoft.Extensions.Options;
 
 namespace MyNotesApi
 {
@@ -25,10 +26,26 @@ namespace MyNotesApi
         {
             Configuration = configuration;
 
+            #region Example of how to create DbContextOptions manually
 
-            var optionsBuilder = new DbContextOptionsBuilder();
+            var optionsBuilder = new DbContextOptionsBuilder<MyDataContext>();
+            optionsBuilder.UseSqlServer(Configuration["ConnectionString:NoteDB"]);
+            
+            #endregion
+
+
+            #region Example of how to create IOptions manually
+
+            var dbSettingsValue = new DatabaseSettings();
+            Configuration.GetSection("ConnectionString").Bind(dbSettingsValue);
+            var options = Options.Create<DatabaseSettings>(dbSettingsValue);
+
+            #endregion
+
+            // using (MyDataContext dbContext
+            //             = new MyDataContext(options))
             using (MyDataContext dbContext
-                        = new MyDataContext())
+                        = new MyDataContext(optionsBuilder.Options))
             {
                 if (dbContext.Users.Count() == 0)
                 {
@@ -55,9 +72,11 @@ namespace MyNotesApi
             services.AddControllers();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.Configure<DatabaseSettings>(Configuration.GetSection("ConnectionString"));
+            services.Configure<DatabaseSettings>(Configuration.GetSection("CloudinarySettings"));
 
-            // services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
-            services.AddDbContext<MyDataContext>();
+            services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
+            //services.AddDbContext<MyDataContext>();
             services.AddScoped<IAuthService, AuthService>();
 
         }
@@ -71,13 +90,13 @@ namespace MyNotesApi
             }
 
             // app.ConfigureExceptionHandler();
-            
+
             app.ConfigureCustomExceptionMiddleware();
 
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            
-            
-            
+
+
+
             app.UseRouting();
 
             app.UseMiddleware<JwtMiddleware>();

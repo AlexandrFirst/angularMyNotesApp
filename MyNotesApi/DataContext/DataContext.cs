@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MyNotesApi.DataContext.ModelConfiguration;
+using MyNotesApi.Helpers;
 
 namespace MyNotesApi.DataContext
 {
@@ -11,20 +13,23 @@ namespace MyNotesApi.DataContext
         public virtual DbSet<Repost> Reposts { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-        // public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
-        // {
-        //     this.ChangeTracker.LazyLoadingEnabled = false;
-        // }
-        public MyDataContext()
+        public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
         }
+        private readonly DatabaseSettings dbSettings;
+        // public MyDataContext(IOptions<DatabaseSettings> dbSettings)
+        // {
+        //     this.dbSettings = dbSettings.Value;
+        //     this.ChangeTracker.LazyLoadingEnabled = false;
+        // }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder contextOptions)
-        {
-            contextOptions.UseSqlServer("Server = (localdb)\\MSSQLLocalDB; Database = MyNoteDB; Trusted_Connection = True;");
-            //contextOptions.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = KinderDatabase; Trusted_Connection = True;");
-        }
+        // protected override void OnConfiguring(DbContextOptionsBuilder contextOptions)
+        // {
+        //     // contextOptions.UseSqlServer("Server = (localdb)\\MSSQLLocalDB; Database = MyNoteDB; Trusted_Connection = True;");
+        //     contextOptions.UseSqlServer(dbSettings.NoteDB);
+
+        // }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

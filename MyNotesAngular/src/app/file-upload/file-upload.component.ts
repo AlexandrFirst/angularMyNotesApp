@@ -1,9 +1,13 @@
 import { HttpEventType } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, HostListener, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { NotificationType } from '../Models/NotificationMessage';
+import { UploadPhotoResponse } from '../Models/UploadPhotoResponse';
+import { NotificationService } from '../Services/notification.service';
+import { PhotoService } from '../Services/photo.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -26,6 +30,7 @@ export class FileUploadComponent implements ControlValueAccessor {
   uploadSub: Subscription;
 
   file: File;
+  photoResponse: UploadPhotoResponse;
 
   isFileChosen = false;
 
@@ -34,14 +39,15 @@ export class FileUploadComponent implements ControlValueAccessor {
 
   onTouched: () => void = () => { };
 
-  constructor(private http: HttpClient) { }
+  constructor(private photoService: PhotoService,
+    private messageService: NotificationService) { }
 
   updateChanges() {
-    this.onChange(this.file);
+    this.onChange(this.photoResponse);
   }
 
-  writeValue(file: any): void {
-    this.file = file;
+  writeValue(photoResponse: any): void {
+    this.photoResponse = photoResponse;
     this.updateChanges();
   }
   registerOnChange(fn: any): void {
@@ -55,6 +61,23 @@ export class FileUploadComponent implements ControlValueAccessor {
     throw new Error('Method not implemented.');
   }
 
+  // @HostListener('window:beforeunload', ['$event'])
+  // public beforeUnload($event) {
+  //   if (this.photoResponse) {
+  //     return false;
+  //   }
+  //   else{
+  //     return true;
+  //   }
+  // }
+
+  @HostListener('window:unload', ['$event'])
+  unloadHandler(event) {
+    if (this.photoResponse) {
+      this.resetImage();
+    }
+  }
+
 
   onFileSelected(event) {
     this.file = event.target.files[0];
@@ -63,11 +86,8 @@ export class FileUploadComponent implements ControlValueAccessor {
       console.log(this.file)
       this.isFileChosen = true;
       this.fileName = this.file.name;
-      this.updateChanges()
-      const upload$ = this.http.post("/api/thumbnail-upload", this.file, {
-        reportProgress: true,
-        observe: 'events'
-      })
+
+      const upload$ = this.photoService.sendPhoto(this.file)
         .pipe(
           finalize(() => this.reset())
         );
@@ -75,16 +95,43 @@ export class FileUploadComponent implements ControlValueAccessor {
       this.uploadSub = upload$.subscribe(event => {
         if (event.type == HttpEventType.UploadProgress) {
           this.uploadProgress = Math.round(100 * (event.loaded / event.total));
-          console.log(this.uploadProgress)
+          console.log(this.uploadProgress);
+          event.type
+        }
+        else if (event.type == HttpEventType.Response) {
+          console.log(event.body)
+          this.photoResponse = JSON.parse(JSON.stringify(event.body));
+          console.log(this.photoResponse)
+
+          this.updateChanges();
         }
       })
     }
   }
 
   resetImage() {
-    this.file = null;
-    this.fileName = null;
-    this.isFileChosen = false;
+    console.log(this.photoResponse);
+
+    this.photoService.deletePhoto(this.photoResponse.imagePublicId).subscribe(success => {
+      console.log("here")
+      this.messageService.sendMessage({
+        message: "Photo is deleted successfully",
+        type: NotificationType.success
+      });
+      console.log("here")
+
+      this.writeValue(null);
+
+      this.file = null;
+      this.fileName = null;
+      this.isFileChosen = false;
+
+    }, error => {
+      this.messageService.sendMessage({
+        message: error.error.Message,
+        type: NotificationType.success
+      });
+    })
 
   }
 

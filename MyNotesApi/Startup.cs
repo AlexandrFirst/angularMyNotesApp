@@ -73,7 +73,7 @@ namespace MyNotesApi
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<DatabaseSettings>(Configuration.GetSection("ConnectionString"));
-            services.Configure<DatabaseSettings>(Configuration.GetSection("CloudinarySettings"));
+            services.Configure<CloudinaryHelper>(Configuration.GetSection("CloudinarySettings"));
 
             services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
             //services.AddDbContext<MyDataContext>();

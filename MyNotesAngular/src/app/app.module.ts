@@ -1,7 +1,7 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
@@ -21,6 +21,7 @@ import { LoadingSignComponent } from './loading-sign/loading-sign.component';
 import { MyErrorHandlerService } from './Services/my-error-handler.service';
 import { MainContentGuard } from './route-guard/main-content.guard';
 import { LoginGuard } from './route-guard/login.guard';
+import { AddHeaderInterceptor } from 'Interceptors/addHeadersInterceptor';
 
 
 
@@ -49,12 +50,12 @@ import { LoginGuard } from './route-guard/login.guard';
       {
         path: 'register',
         loadChildren: () => import('./registrationContent/registration/registration.module').then(m => m.RegistrationModule),
-        canActivateChild:[LoginGuard]
+        canActivateChild: [LoginGuard]
       },
       {
         path: 'main', component: MainContentViewComponent,
         loadChildren: () => import('./mainContent/main-content/main-content.module').then(m => m.MainContentModule),
-        canActivateChild: [MainContentGuard] 
+        canActivateChild: [MainContentGuard]
       },
       { path: '', redirectTo: '/register/register', pathMatch: 'full' },
       { path: '**', redirectTo: '/register/register', pathMatch: 'full' }
@@ -62,7 +63,8 @@ import { LoginGuard } from './route-guard/login.guard';
   ],
   providers: [
     MyErrorHandlerService,
-    {provide: ErrorHandler, useClass: MyErrorHandlerService}
+    { provide: ErrorHandler, useClass: MyErrorHandlerService },
+    { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

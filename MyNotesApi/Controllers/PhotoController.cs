@@ -4,8 +4,10 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MyNotesApi.DataContext;
 using MyNotesApi.DTOs;
 using MyNotesApi.Helpers;
+using MyNotesApi.Helpers.ExceptionHandler.CustomExceptions;
 
 namespace MyNotesApi.Controllers
 {
@@ -15,9 +17,12 @@ namespace MyNotesApi.Controllers
     public class PhotoController : ControllerBase
     {
         private readonly CloudinaryHelper cloudinaryHelper;
+        private readonly MyDataContext dbContext;
+
         private Cloudinary cloudinary { get; }
 
-        public PhotoController(IOptions<CloudinaryHelper> cloudinaryHelper)
+        public PhotoController(IOptions<CloudinaryHelper> cloudinaryHelper,
+                                MyDataContext dbContext)
         {
             this.cloudinaryHelper = cloudinaryHelper.Value;
 
@@ -28,11 +33,12 @@ namespace MyNotesApi.Controllers
 
             cloudinary = new Cloudinary(account);
             cloudinary.Api.Secure = true;
+            this.dbContext = dbContext;
         }
 
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadPhoto([FromForm] IFormFile photo)
+        [HttpPost("upload/{isMain=false}")]
+        public async Task<IActionResult> UploadPhoto([FromForm] IFormFile photo, bool isMain)
         {
             var file = photo;
 
@@ -50,6 +56,22 @@ namespace MyNotesApi.Controllers
                     };
 
                     uploadResults = await cloudinary.UploadAsync(uploadParams);
+
+                    try
+                    {
+                        await dbContext.Images.AddAsync(new Image()
+                        {
+                            IsTitleImage = isMain,
+                            PublicKey = uploadResults.PublicId,
+                            Url = uploadResults.Url.ToString()
+                        });
+
+                        await dbContext.SaveChangesAsync();
+                    }
+                    catch
+                    {
+                        throw new PhotoUploadException();
+                    }
                 }
             }
             else
@@ -75,9 +97,9 @@ namespace MyNotesApi.Controllers
             }
             catch
             {
-                return BadRequest("Unable to delete the photo");
+                return BadRequest(new { Message = "Unable to delete the photo" });
             }
-            return Ok("The photo is deleted");
+            return Ok(new { Message = "The photo is deleted" });
         }
     }
 }

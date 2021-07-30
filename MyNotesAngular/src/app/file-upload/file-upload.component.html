@@ -5,13 +5,14 @@
 
         {{fileName || "Title image(Not uploaded yet.)"}}
 
-        <button mat-mini-fab class="upload-btn" (click)="fileUpload.click()" type="button">
+        <button mat-mini-fab class="upload-btn" (click)="fileUpload.click()" type="button" *ngIf="!this.isFileChosen">
             <mat-icon>attach_file</mat-icon>
         </button>
-        <button class="cancel-upload-photo-btn" type="button" *ngIf="this.isFileChosen" (click)="resetImage()">
+        <button class="cancel-upload-photo-btn" type="button" *ngIf="this.isFileChosen" (click)="resetImage()" >
             <mat-icon>delete</mat-icon>
         </button>
     </div>
+    <img [src]="photoResponse.imgPath" *ngIf="photoResponse" style="margin: 10px auto;"/>
 
     <div class="progress">
 

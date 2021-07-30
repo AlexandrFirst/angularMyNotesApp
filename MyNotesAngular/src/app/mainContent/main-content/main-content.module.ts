@@ -19,6 +19,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { AdminAnaliticComponent } from '../admin-analitic/admin-analitic.component';
 import { SubMainContentGuard } from 'src/app/route-guard/sub-main-content.guard';
 import {MatProgressBarModule} from '@angular/material/progress-bar'
+import { LeaveAddNoteGuard } from '../route-guards/leave-add-note.guard';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar'
     MatProgressBarModule,
     RouterModule.forChild([
       {path: 'notes', component: NotesComponent},
-      {path: 'add', component: AddNoteComponent},
+      {path: 'add', component: AddNoteComponent, canDeactivate: [LeaveAddNoteGuard]},
       {path: 'likedposts', component: LikedPostsComponent},
       {path: 'userprofile', component: UserProfileComponent},
       {path: 'userchats', component: UserChatsComponent},

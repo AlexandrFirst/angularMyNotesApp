@@ -1,8 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularEditorConfig, UploadResponse } from '@kolkov/angular-editor';
+import { map } from 'rxjs/operators';
+import { UploadPhotoResponse } from 'src/app/Models/UploadPhotoResponse';
+import { PhotoService } from 'src/app/Services/photo.service';
 
 @Component({
   selector: 'app-add-note',
@@ -13,9 +16,11 @@ import { AngularEditorConfig, UploadResponse } from '@kolkov/angular-editor';
 export class AddNoteComponent implements OnInit {
 
 
-  titleImgName;
+  titleImg: UploadPhotoResponse;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private photoService: PhotoService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -25,6 +30,7 @@ export class AddNoteComponent implements OnInit {
     htmlContent: new FormControl('')
   });
 
+  uploadedImages: UploadPhotoResponse[];
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -64,15 +70,32 @@ export class AddNoteComponent implements OnInit {
     upload: (file: File) => {
       const uploadData: FormData = new FormData();
 
-      uploadData.append('file', file, file.name);
+      uploadData.append('file', file);
 
-      return this.http.post<UploadResponse>('someUrl', uploadData, {
-        headers: {
-          'enctype': 'multipart/form-data'
-        },
-        reportProgress: true,
-        observe: 'events'
-      });
+      let response = this.photoService.sendPhoto(uploadData).pipe(map((elem: HttpResponse<any>) => {
+
+        const inputResponse = JSON.parse(JSON.stringify(elem.body)) as UploadPhotoResponse;
+        this.uploadedImages.push(inputResponse);
+
+        let new_reponse: UploadResponse = {
+          imageUrl: inputResponse.imgPath
+        }
+
+        let outputResponse: HttpResponse<UploadResponse> = {
+          body: new_reponse,
+          type: elem.type,
+          headers: elem.headers,
+          ok: elem.ok,
+          status: elem.status,
+          statusText: elem.statusText,
+          url: elem.url,
+          clone: elem.clone
+        }
+
+        return outputResponse;
+      }))
+
+      return response;
     },
     uploadWithCredentials: false,
     sanitize: true,
@@ -91,6 +114,28 @@ export class AddNoteComponent implements OnInit {
     ],
   };
 
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnload($event) {
+    if (this.form.get('titleImage') || this.form.get("htmlContent").value) {
+      console.log("here")
+      return false
+    }
+    else {
+      return false;
+    }
+  }
+
+  @HostListener('window:unload', ['$event'])
+  unloadHandler(event) {
+    if(this.form.get('htmlContent')){
+        this.filterImages();
+    }
+  }
+
+  filterImages(){
+    
+  }
+
   onSubmit() {
     console.log("html content: ", this.form.get('htmlContent').value);
 
@@ -101,7 +146,7 @@ export class AddNoteComponent implements OnInit {
     }
   }
 
-  cancelBtnClick(){
+  cancelBtnClick() {
     this.router.navigate(['main']);
     console.log('herte')
   }

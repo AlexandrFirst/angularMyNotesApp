@@ -1,10 +1,14 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { error } from '@angular/compiler/src/util';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularEditorConfig, UploadResponse } from '@kolkov/angular-editor';
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { NotificationType } from 'src/app/Models/NotificationMessage';
 import { UploadPhotoResponse } from 'src/app/Models/UploadPhotoResponse';
+import { NotificationService } from 'src/app/Services/notification.service';
 import { PhotoService } from 'src/app/Services/photo.service';
 
 @Component({
@@ -20,6 +24,7 @@ export class AddNoteComponent implements OnInit {
 
   constructor(
     private photoService: PhotoService,
+    private notificationService: NotificationService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -121,19 +126,30 @@ export class AddNoteComponent implements OnInit {
       return false
     }
     else {
-      return false;
+      return true;
     }
   }
 
   @HostListener('window:unload', ['$event'])
   unloadHandler(event) {
-    if(this.form.get('htmlContent')){
-        this.filterImages();
+    if (this.form.get('htmlContent')) {
+      this.photoService.deletePhotoRange(this.uploadedImages.map(i => i.imagePublicId)).subscribe(success => {
+        console.log(success);
+        this.notificationService.sendMessage({
+          message: "Ok",
+          type: NotificationType.success
+        });
+      }, error => {
+        this.notificationService.sendMessage({
+          message: "Smth went wrong",
+          type: NotificationType.error
+        });
+      });
     }
   }
 
-  filterImages(){
-    
+  filterImages() {
+
   }
 
   onSubmit() {

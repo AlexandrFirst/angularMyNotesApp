@@ -12,20 +12,24 @@ export class PhotoService extends HttpService {
     super(http);
   }
 
-  sendPhoto(photo): Observable<HttpEvent<UploadPhotoResponse>> {
+  sendPhoto(photo, isMain = false): Observable<HttpEvent<UploadPhotoResponse>> {
 
     const sendingFoto = new FormData();
     sendingFoto.append("photo", photo);
 
-    return this.http.post(this.baseUrl + "photo/upload/true", sendingFoto, {
+    return this.http.post(this.baseUrl + "photo/upload/" + isMain, sendingFoto, {
       reportProgress: true,
       observe: 'events'
     }) as Observable<HttpEvent<UploadPhotoResponse>>;
   }
 
-  deletePhoto(photoId:string) {
+  deletePhoto(photoId: string) {
     console.log(photoId);
     return this.http.delete(this.baseUrl + "photo/delete/" + photoId);
   }
 
+  deletePhotoRange(pahotoIds: string[]) {
+    return this.http.post(this.baseUrl + "photo/deleteRange", pahotoIds);
+  }
 }
+

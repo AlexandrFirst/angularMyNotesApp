@@ -77,7 +77,10 @@ namespace MyNotesApi
 
             services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
             //services.AddDbContext<MyDataContext>();
+            services.AddScoped<IUserContextService, UserContextService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPostService, PostService>();
 
         }
 

@@ -87,7 +87,7 @@ export class FileUploadComponent implements ControlValueAccessor {
       this.isFileChosen = true;
       this.fileName = this.file.name;
 
-      const upload$ = this.photoService.sendPhoto(this.file)
+      const upload$ = this.photoService.sendPhoto(this.file, true)
         .pipe(
           finalize(() => this.reset())
         );

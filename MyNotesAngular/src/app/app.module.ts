@@ -21,7 +21,8 @@ import { LoadingSignComponent } from './loading-sign/loading-sign.component';
 import { MyErrorHandlerService } from './Services/my-error-handler.service';
 import { MainContentGuard } from './route-guard/main-content.guard';
 import { LoginGuard } from './route-guard/login.guard';
-import { AddHeaderInterceptor } from 'Interceptors/addHeadersInterceptor';
+import { AddHeaderInterceptor } from './Interceptors/addHeadersInterceptor';
+import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerInterceptor';
 
 
 
@@ -64,7 +65,8 @@ import { AddHeaderInterceptor } from 'Interceptors/addHeadersInterceptor';
   providers: [
     MyErrorHandlerService,
     { provide: ErrorHandler, useClass: MyErrorHandlerService },
-    { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

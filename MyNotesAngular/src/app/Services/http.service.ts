@@ -36,4 +36,11 @@ export class HttpService {
     return this.client.post(this.baseUrl + url, body, { headers });
   }
 
+  GetData(url){
+    return this.client.get(this.baseUrl + url);
+  }
+
+  DeleteData(url){
+    return this.client.delete(this.baseUrl + url)
+  }
 }

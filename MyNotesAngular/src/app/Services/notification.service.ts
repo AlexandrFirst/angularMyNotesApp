@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { NotificationMessage, NotificationType } from '../Models/NotificationMessage';
@@ -8,15 +8,22 @@ import { NotificationMessage, NotificationType } from '../Models/NotificationMes
 })
 export class NotificationService {
 
+
+  private toastrService: ToastrService;
   private NotificationSubject: Subject<NotificationMessage> = new Subject<NotificationMessage>();
 
-  sendMessage(message: NotificationMessage){
-      this.NotificationSubject.next(message);
+  sendMessage(message: NotificationMessage) {
+    this.NotificationSubject.next(message);
   }
 
-  constructor(private toastrService: ToastrService) {
+  constructor(private injector: Injector) {
+
+    if(this.toastrService == null){
+      this.toastrService = this.injector.get(ToastrService);
+    }
+
     this.NotificationSubject.subscribe(message => {
-      switch(message.type){
+      switch (message.type) {
         case NotificationType.success:
           this.toastrService.success(message.message);
           break;
@@ -30,12 +37,12 @@ export class NotificationService {
           this.toastrService.info(message.message);
           break;
         default:
-          case NotificationType.info:
-            this.toastrService.info(message.message);
-            break;
+        case NotificationType.info:
+          this.toastrService.info(message.message);
+          break;
       }
     }, err => {
       console.log("Error when processing toatstr message")
     });
-   }
+  }
 }

@@ -3,6 +3,9 @@
         <app-file-upload formControlName="titleImage" requiredFileType="image/jpeg" [(ngModel)]="titleImg"></app-file-upload>
         <angular-editor formControlName="htmlContent" [config]="editorConfig"></angular-editor>
         <div class="btn-container">
+            <button type="button" (click)="deleteNote()" *ngIf="isEditingMode">
+                Delete note
+            </button>
             <button type="button" (click)="cancelBtnClick()">
                 Cancel
             </button>

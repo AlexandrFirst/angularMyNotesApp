@@ -37,6 +37,7 @@ namespace MyNotesApi.Helpers.ExceptionHandler.CustomExceptionMiddleware
                 UserExistsException => "User exception: " + exception.Message,
                 PhotoUploadException => "Photo ecepxtion: " + exception.Message,
                 NoteUploadException => "Note exception: " + exception.Message,
+                NoteNotFoundException => "Note exception: " + exception.Message,
                 _ => exception.Message
             };
 

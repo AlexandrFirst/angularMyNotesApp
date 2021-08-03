@@ -1,7 +1,7 @@
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UploadPhotoResponse } from '../Models/UploadPhotoResponse';
+import { UploadPhoto } from '../Models/UploadPhoto';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class PhotoService extends HttpService {
     super(http);
   }
 
-  sendPhoto(photo, isMain = false): Observable<HttpEvent<UploadPhotoResponse>> {
+  sendPhoto(photo, isMain = false): Observable<HttpEvent<UploadPhoto>> {
 
     const sendingFoto = new FormData();
     sendingFoto.append("photo", photo);
@@ -20,7 +20,7 @@ export class PhotoService extends HttpService {
     return this.http.post(this.baseUrl + "photo/upload/" + isMain, sendingFoto, {
       reportProgress: true,
       observe: 'events'
-    }) as Observable<HttpEvent<UploadPhotoResponse>>;
+    }) as Observable<HttpEvent<UploadPhoto>>;
   }
 
   deletePhoto(photoId: string) {

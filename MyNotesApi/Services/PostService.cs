@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using AutoMapper;
+using MyNotesApi.Helpers.ExceptionHandler.CustomExceptions;
 
 namespace MyNotesApi.Services
 {
@@ -32,7 +33,8 @@ namespace MyNotesApi.Services
 
         public async Task<bool> PostNote(string noteText, List<ImageDto> uploadImages, ImageDto titleImage)
         {
-            uploadImages.Add(titleImage);
+            if (titleImage != null)
+                uploadImages.Add(titleImage);
 
             var urlPhotosToDelete = filterInputImgSrc(noteText, uploadImages.Select(i => i.ImgPath).ToList());
             var photoDtosToPost = uploadImages.FindAll(i => !urlPhotosToDelete.Exists(u => u == i.ImgPath));
@@ -60,19 +62,38 @@ namespace MyNotesApi.Services
 
             return true;
         }
-        public Task<bool> DeleteNote(int noteId)
+
+        
+        public async Task<bool> DeleteNote(int noteId)
         {
-            throw new System.NotImplementedException();
+            var noteToRemove = await dbContext.Notes.FirstOrDefaultAsync(n => n.NoteId == noteId);
+            if (noteToRemove == null)
+                throw new NoteNotFoundException(noteId);
+
+            dbContext.Notes.Remove(noteToRemove);
+            await dbContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task<NoteDto> GetNote(int noteId)
+        public async Task<PostNoteDto> GetNote(int noteId)
         {
-            var note_db = await dbContext.Notes.FirstOrDefaultAsync(n => n.NoteId == noteId);
-            var note_dto = mapper.Map<NoteDto>(note_db);
+            var userId = userContext.GetUserContext().Id;
+
+            var note_db = await dbContext.Notes.Include(i => i.NoteImages)
+                                               .Include(u => u.Author)
+                                               .FirstOrDefaultAsync(n => n.NoteId == noteId && n.Author.Id == userId);
+            PostNoteDto note_dto = null;
+            if (note_db != null)
+                note_dto = new PostNoteDto()
+                {
+                    NoteText = note_db.Content,
+                    TitleImage = mapper.Map<ImageDto>(note_db.NoteImages.FirstOrDefault(i => i.IsTitleImage))
+                };
 
             return note_dto;
         }
-        
+
         public async Task<List<NoteDto>> GetNotes(int userId)
         {
             var userWithNotes = await dbContext.Users.Include(n => n.Notes).FirstOrDefaultAsync(u => u.Id == userId);
@@ -83,7 +104,7 @@ namespace MyNotesApi.Services
             return notesToReturn;
 
         }
-        
+
         public async Task<List<NoteDto>> GetNotes()
         {
             return await GetNotes(userContext.GetUserContext().Id);
@@ -113,6 +134,6 @@ namespace MyNotesApi.Services
 
         }
 
-       
+
     }
 }

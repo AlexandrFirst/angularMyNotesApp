@@ -9,7 +9,7 @@ namespace MyNotesApi.ServiceProtos
     {
         Task<bool> PostNote(string noteText, List<ImageDto> uploadImages, ImageDto titleImage);
         Task<bool> DeleteNote(int noteId);
-        Task<NoteDto> GetNote(int noteId);
+        Task<PostNoteDto> GetNote(int noteId);
         Task<List<NoteDto>> GetNotes(int userId);
         Task<List<NoteDto>> GetNotes();
     }

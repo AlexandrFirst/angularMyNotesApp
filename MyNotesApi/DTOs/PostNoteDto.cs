@@ -4,8 +4,8 @@ namespace MyNotesApi.DTOs
 {
     public class PostNoteDto
     {
-        public string noteText { get; set; }
-        public List<ImageDto> uploadImages { get; set; }
-        public ImageDto titleImage { get; set; }
+        public string NoteText { get; set; }
+        public List<ImageDto> UploadImages { get; set; }
+        public ImageDto TitleImage { get; set; }
     }
 }

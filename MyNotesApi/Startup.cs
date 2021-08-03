@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-
+using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +11,8 @@ using MyNotesApi.DataContext;
 using MyNotesApi.ServiceProtos;
 using MyNotesApi.Services;
 using MyNotesApi.Helpers;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+
 using Microsoft.EntityFrameworkCore;
 using MyNotesApi.Helpers.ExceptionHandler;
 using Microsoft.Extensions.Options;
@@ -30,7 +31,7 @@ namespace MyNotesApi
 
             var optionsBuilder = new DbContextOptionsBuilder<MyDataContext>();
             optionsBuilder.UseSqlServer(Configuration["ConnectionString:NoteDB"]);
-            
+
             #endregion
 
 
@@ -66,7 +67,7 @@ namespace MyNotesApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
@@ -81,6 +82,11 @@ namespace MyNotesApi
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPostService, PostService>();
+
+            services.AddControllers().AddNewtonsoftJson(o =>
+            {
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
         }
 

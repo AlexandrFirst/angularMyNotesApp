@@ -27,14 +27,14 @@ namespace MyNotesApi.Controllers
         [HttpPost("newPost")]
         public async Task<IActionResult> PostNote(PostNoteDto postNoteDto)
         {
-            await postService.PostNote(postNoteDto.noteText, postNoteDto.uploadImages, postNoteDto.titleImage);
+            await postService.PostNote(postNoteDto.NoteText, postNoteDto.UploadImages, postNoteDto.TitleImage);
             return Ok(new
             {
                 Message = "Your post in added successfully"
             });
         }
 
-        [HttpGet("notes/{userId?}")]
+        [HttpGet("allNotes/{userId?}")]
         public async Task<IActionResult> GetMyNotes(int? userId)
         {
 
@@ -57,5 +57,29 @@ namespace MyNotesApi.Controllers
             });
         }
 
+        [HttpGet("note/{noteId}")]
+        public async Task<IActionResult> GetNote(int noteId)
+        {
+            PostNoteDto note = await postService.GetNote(noteId);
+            if (note == null)
+            {
+                throw new NoteNotFoundException(noteId);
+            }
+
+            return Ok(new {
+                note
+            });
+        }
+
+
+        [HttpDelete("note/{noteId}")]
+        public async Task<IActionResult> DeleteNote(int noteId){
+            
+            await postService.DeleteNote(noteId);
+
+            return Ok(new {
+                Message = "Done"
+            });
+        }
     }
 }

@@ -5,7 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { NotificationType } from '../Models/NotificationMessage';
-import { UploadPhotoResponse } from '../Models/UploadPhotoResponse';
+import { UploadPhoto } from '../Models/UploadPhoto';
 import { NotificationService } from '../Services/notification.service';
 import { PhotoService } from '../Services/photo.service';
 
@@ -30,7 +30,7 @@ export class FileUploadComponent implements ControlValueAccessor {
   uploadSub: Subscription;
 
   file: File;
-  photoResponse: UploadPhotoResponse;
+  photoResponse: UploadPhoto;
 
   isFileChosen = false;
 
@@ -48,6 +48,9 @@ export class FileUploadComponent implements ControlValueAccessor {
 
   writeValue(photoResponse: any): void {
     this.photoResponse = photoResponse;
+    
+    this.isFileChosen = photoResponse != null;
+
     this.updateChanges();
   }
   registerOnChange(fn: any): void {

@@ -9,6 +9,7 @@ namespace MyNotesApi.Mapping
         public UserProfile()
         {
             CreateMap<UserRegister, User>();
+            CreateMap<User, UserPostDto>();
         }
     }
 }

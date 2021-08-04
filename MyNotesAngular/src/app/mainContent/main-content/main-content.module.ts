@@ -20,6 +20,7 @@ import { AdminAnaliticComponent } from '../admin-analitic/admin-analitic.compone
 import { SubMainContentGuard } from 'src/app/route-guard/sub-main-content.guard';
 import {MatProgressBarModule} from '@angular/material/progress-bar'
 import { LeaveAddNoteGuard } from '../route-guards/leave-add-note.guard';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { LeaveAddNoteGuard } from '../route-guards/leave-add-note.guard';
     MatIconModule,
     AngularEditorModule,
     MatProgressBarModule,
+    QuillModule,
     RouterModule.forChild([
       {path: 'notes', component: NotesComponent},
       {path: 'add', component: AddNoteComponent, canDeactivate: [LeaveAddNoteGuard]},

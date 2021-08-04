@@ -1,30 +1,31 @@
-
-    <div class="card" *ngFor="let item of [1]">
+<div *ngIf="notes.length > 0; else no_notes_count">
+    <div class="card" *ngFor="let item of notes">
         <img src="../assets/img/photo1.jpg" />
         <div class="main-content">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fugit, reiciendis eius dignissimos et
-            obcaecati magnam soluta dolorem saepe dolor perferendis distinctio eligendi, voluptate ipsam perspiciatis
-            fuga
-            necessitatibus maxime nisi placeat dolore quibusdam libero deserunt totam. Natus mollitia ipsam a magni,
-            odio
-            praesentium reprehenderit, sequi excepturi laborum ipsum, neque rem cupiditate repudiandae vero sed totam
-            repellendus. Aperiam deserunt asperiores dolore est esse et sequi exercitationem at? Enim doloremque,
-            assumenda
-            eaque illo repellat numquam! Dolores nihil provident asperiores a odit, nam delectus et natus vel quisquam
-            dolore
-            ut numquam temporibus sequi? Quas tempore dicta vel rerum mollitia est impedit provident ea!
+            {{item.content}}
         </div>
         <div class="footer">
             <div class="actions">
-                <span class="fa fa-heart-o"><span>12</span></span>
-                <span class="fa fa-share-square"><span>12</span></span>
+                <span class="fa fa-heart-o"><span>{{item.likes.length}}</span></span>
+                <span class="fa fa-share-square"><span>{{item.reposts.length}}</span></span>
                 <a href=""> <span class="fa fa-edit"></span></a>
             </div>
             <div class="author">
-                By Alex
+                By {{item.author.name}}
             </div>
         </div>
     </div>
+</div>
+<ng-template #no_notes_count>
+    <div style="height: 600px; display: flex; justify-content: center;">
+        <div style="align-self: center;
+                    font-size: 3em;
+                    font-family: 'Fredoka One', sans-serif;
+                    color: rgb(100, 100, 100);">
+            Add your fist note
+        </div>
+    </div>
+</ng-template>
 <div class="add-button">
     <a routerLink="../add" class="fa fa-plus"></a>
 </div>

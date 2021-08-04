@@ -99,7 +99,6 @@ export class FileUploadComponent implements ControlValueAccessor {
         if (event.type == HttpEventType.UploadProgress) {
           this.uploadProgress = Math.round(100 * (event.loaded / event.total));
           console.log(this.uploadProgress);
-          event.type
         }
         else if (event.type == HttpEventType.Response) {
           console.log(event.body)

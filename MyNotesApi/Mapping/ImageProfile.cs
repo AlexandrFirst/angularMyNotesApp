@@ -10,7 +10,7 @@ namespace MyNotesApi.Mapping
         {
             CreateMap<Image, ImageDto>()
                 .ForMember(im => im.ImagePublicId, opt => opt.MapFrom(dto => dto.PublicKey))
-                .ForMember(im => im.ImgPath, opt => opt.MapFrom(dto => dto.Url));
+                .ForMember(im => im.ImageUrl, opt => opt.MapFrom(dto => dto.Url));
         }
     }
 }

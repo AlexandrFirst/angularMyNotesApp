@@ -29,10 +29,7 @@ namespace MyNotesApi.Controllers
 
             if (result != null)
             {
-                return Ok(new
-                {
-                    result
-                });
+                return Ok(result);
             }
             else
             {

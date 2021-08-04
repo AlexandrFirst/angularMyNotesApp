@@ -36,9 +36,9 @@ namespace MyNotesApi.Services
             if (titleImage != null)
                 uploadImages.Add(titleImage);
 
-            var urlPhotosToDelete = filterInputImgSrc(noteText, uploadImages.Select(i => i.ImgPath).ToList());
-            var photoDtosToPost = uploadImages.FindAll(i => !urlPhotosToDelete.Exists(u => u == i.ImgPath));
-            var photosToPost = dbContext.Images.Where(i => photoDtosToPost.Any(p => p.ImgPath == i.Url)).ToList();
+            var urlPhotosToDelete = filterInputImgSrc(noteText, uploadImages.Select(i => i.ImageUrl).ToList());
+            var photoDtosToPost = uploadImages.FindAll(i => !urlPhotosToDelete.Exists(u => u == i.ImageUrl));
+            var photosToPost = dbContext.Images.Where(i => photoDtosToPost.Any(p => p.ImageUrl == i.Url)).ToList();
 
 
             await photoService.DeleteRangePhoto(new ImageDeleteRangeDto()

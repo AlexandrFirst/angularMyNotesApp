@@ -1,4 +1,6 @@
-export class UploadPhoto {
+import { UploadResponse } from "@kolkov/angular-editor";
+
+export class UploadPhoto implements UploadResponse {
     public imagePublicId: string;
-    public imgPath: string;
+    public imageUrl: string;
 }

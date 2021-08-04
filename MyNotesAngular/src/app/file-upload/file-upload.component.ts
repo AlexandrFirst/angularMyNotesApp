@@ -35,6 +35,7 @@ export class FileUploadComponent implements ControlValueAccessor {
   isFileChosen = false;
 
 
+
   onChange: (_: any) => void = (_: any) => { };
 
   onTouched: () => void = () => { };

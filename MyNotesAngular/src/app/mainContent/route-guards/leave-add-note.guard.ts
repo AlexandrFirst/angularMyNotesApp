@@ -13,7 +13,7 @@ export class LeaveAddNoteGuard implements CanDeactivate<AddNoteComponent> {
   constructor(private notificationService: NotificationService) {}
 
   canDeactivate(component: AddNoteComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if (component.form.get('titleImage').value || component.form.get('htmlContent').value) {
+    if (component.isDirty) {
       this.notificationService.sendMessage({
         message:"You can't leave while you are editing!!!",
         type: NotificationType.warning

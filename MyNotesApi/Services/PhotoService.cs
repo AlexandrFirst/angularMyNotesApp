@@ -78,7 +78,8 @@ namespace MyNotesApi.Services
             return new ImageDto()
             {
                 ImagePublicId = uploadResults.PublicId,
-                ImageUrl = uploadResults.Url.ToString()
+                ImageUrl = uploadResults.Url.ToString(),
+                IsTitleImage = isMain
             };
         }
 

@@ -36,9 +36,10 @@ namespace MyNotesApi.Services
             if (titleImage != null)
                 uploadImages.Add(titleImage);
 
-            var urlPhotosToDelete = filterInputImgSrc(noteText, uploadImages.Select(i => i.ImageUrl).ToList());
+            var urlPhotosToDelete = filterInputImgSrc(noteText, uploadImages.Where(i => !i.IsTitleImage).Select(i => i.ImageUrl).ToList());
             var photoDtosToPost = uploadImages.FindAll(i => !urlPhotosToDelete.Exists(u => u == i.ImageUrl));
-            var photosToPost = dbContext.Images.Where(i => photoDtosToPost.Any(p => p.ImageUrl == i.Url)).ToList();
+
+            var photosToPost = dbContext.Images.ToList().Where(i => photoDtosToPost.Any(p => p.ImageUrl == i.Url));
 
 
             await photoService.DeleteRangePhoto(new ImageDeleteRangeDto()
@@ -54,7 +55,7 @@ namespace MyNotesApi.Services
             {
                 Content = noteText,
                 Author = author,
-                NoteImages = photosToPost,
+                NoteImages = photosToPost.ToList(),
                 PublicationDate = DateTime.Now
             });
 
@@ -63,7 +64,7 @@ namespace MyNotesApi.Services
             return true;
         }
 
-        
+
         public async Task<bool> DeleteNote(int noteId)
         {
             var noteToRemove = await dbContext.Notes.FirstOrDefaultAsync(n => n.NoteId == noteId);
@@ -96,7 +97,14 @@ namespace MyNotesApi.Services
 
         public async Task<List<NoteDto>> GetNotes(int userId)
         {
-            var userWithNotes = await dbContext.Users.Include(n => n.Notes).FirstOrDefaultAsync(u => u.Id == userId);
+            var userWithNotes = await dbContext.Users.Where(u => u.Id == userId).Include(n => n.Notes)
+                                                        .ThenInclude(p => p.NoteImages.Where(d => d.IsTitleImage)).FirstOrDefaultAsync();
+            
+            if(userWithNotes == null)
+            {
+                throw new UserNotFoundException();                
+            }
+
             var notesDB = userWithNotes.Notes;
 
             var notesToReturn = mapper.Map<List<NoteDto>>(notesDB);
@@ -118,12 +126,16 @@ namespace MyNotesApi.Services
             document.LoadHtml(htmlContent);
 
             var nodes = document.DocumentNode.SelectNodes(@"//img[@src]");
-            foreach (HtmlNode img in nodes)
+            if (nodes != null)
             {
-                string imgSrc = img.GetAttributeValue("src", string.Empty);
-                if (!string.IsNullOrEmpty(imgSrc))
+                foreach (HtmlNode img in nodes)
                 {
-                    htmlContentImgs.Add(imgSrc);
+                    string imgSrc = img.GetAttributeValue("src", string.Empty);
+
+                    if (!string.IsNullOrEmpty(imgSrc))
+                    {
+                        htmlContentImgs.Add(imgSrc);
+                    }
                 }
             }
 

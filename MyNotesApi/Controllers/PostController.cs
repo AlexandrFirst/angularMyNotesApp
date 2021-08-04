@@ -51,10 +51,7 @@ namespace MyNotesApi.Controllers
             if (response.Count == 0)
                 throw new NoteDownloadException(userContext.GetUserContext().Mail);
 
-            return Ok(new
-            {
-                response
-            });
+            return Ok(response);
         }
 
         [HttpGet("note/{noteId}")]

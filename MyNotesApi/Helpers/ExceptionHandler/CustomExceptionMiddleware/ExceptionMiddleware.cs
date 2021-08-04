@@ -34,9 +34,8 @@ namespace MyNotesApi.Helpers.ExceptionHandler.CustomExceptionMiddleware
 
             string message = exception switch
             {
-                UserExistsException => "User exception: " + exception.Message,
-                PhotoUploadException => "Photo ecepxtion: " + exception.Message,
-                NoteUploadException => "Note exception: " + exception.Message,
+                UserExistsException or UserNotFoundException  => "User exception: " + exception.Message,
+                PhotoUploadException or NoteUploadException => "Photo ecepxtion: " + exception.Message,
                 NoteNotFoundException => "Note exception: " + exception.Message,
                 _ => exception.Message
             };

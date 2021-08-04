@@ -21,7 +21,7 @@ export class NotesComponent implements OnInit {
     this.loadingSignService.activate();
     this.noteService.getMyNotes().subscribe((notes: NoteDto[]) => {
       console.log(this.notes);
-
+      this.notes = notes;
       
       this.loadingSignService.deactivate();
     }, error => {

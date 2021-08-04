@@ -4,5 +4,6 @@ namespace MyNotesApi.DTOs
     { 
         public string ImagePublicId { get; set; }
         public string ImageUrl { get; set; }
+        public bool IsTitleImage { get; set; }
     }
 }

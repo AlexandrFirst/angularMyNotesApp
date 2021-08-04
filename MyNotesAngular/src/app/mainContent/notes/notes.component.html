@@ -1,8 +1,7 @@
 <div *ngIf="notes.length > 0; else no_notes_count">
     <div class="card" *ngFor="let item of notes">
-        <img src="../assets/img/photo1.jpg" />
-        <div class="main-content">
-            {{item.content}}
+        <img src={{item.titleImage.imageUrl}} />
+        <div class="main-content" [innerHTML] = "item.content">
         </div>
         <div class="footer">
             <div class="actions">

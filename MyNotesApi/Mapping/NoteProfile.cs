@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using MyNotesApi.DataContext;
 using MyNotesApi.DTOs;
@@ -8,7 +9,7 @@ namespace MyNotesApi.Mapping
     {
         public NoteProfile()
         {
-            CreateMap<Note, NoteDto>();
+            CreateMap<Note, NoteDto>().ForMember(i => i.TitleImage, opt => opt.MapFrom(n => n.NoteImages.FirstOrDefault()));
         }
     }
 }

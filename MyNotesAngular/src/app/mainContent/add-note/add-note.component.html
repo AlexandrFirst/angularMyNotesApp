@@ -3,10 +3,7 @@
         <app-file-upload formControlName="titleImage" requiredFileType="image/jpeg"></app-file-upload>
         <!-- <angular-editor formControlName="htmlContent" [config]="editorConfig"></angular-editor> -->
         
-        <quill-editor [modules]="modules"></quill-editor>
-        <div>
-            {{this.form.get("htmlContent").value}}
-        </div>
+        <quill-editor formControlName="htmlContent" [modules]="modules"></quill-editor>
         <div class="btn-container">
             <button type="button" (click)="deleteNote()" *ngIf="isEditingMode">
                 Delete note

@@ -1,7 +1,7 @@
 import { HttpClient, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { error } from '@angular/compiler/src/util';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularEditorConfig, UploadResponse } from '@kolkov/angular-editor';
 import { of } from 'rxjs';
@@ -28,12 +28,12 @@ Quill.register('modules/videoHandler', VideoHandler);
 export class AddNoteComponent implements OnInit {
 
 
-
+  isDirty: boolean = false;
   isEditingMode: boolean = false;
 
   form = new FormGroup({
-    titleImage: new FormControl(),
-    htmlContent: new FormControl()
+    titleImage: new FormControl(null, [Validators.required]),
+    htmlContent: new FormControl(null, [Validators.required])
   });
 
   constructor(
@@ -56,6 +56,10 @@ export class AddNoteComponent implements OnInit {
         })
       }
     })
+
+    this.form.valueChanges.subscribe(val => {
+      this.isDirty = true;
+    });
   }
 
 
@@ -172,16 +176,17 @@ export class AddNoteComponent implements OnInit {
 
         return new Promise((resolve, reject) => {
           return this.photoService.sendPhoto(file).toPromise()
-              .then((event:HttpResponse<UploadPhoto>) => {
-                if(event.type == HttpEventType.Response){
-                  let res = event.body.imageUrl;
-                  resolve(res);
-                }
-              })
-              .catch(error => {
-                reject("Upload failed");
-                console.log(error);
-              });
+            .then((event: HttpResponse<UploadPhoto>) => {
+              if (event.type == HttpEventType.Response) {
+                let res = event.body.imageUrl;
+                this.uploadedImages.push(event.body);
+                resolve(res);
+              }
+            })
+            .catch(error => {
+              reject("Upload failed");
+              console.log(error);
+            });
         });
       },
       accepts: ['png', 'jpg'] // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
@@ -219,6 +224,15 @@ export class AddNoteComponent implements OnInit {
 
 
   onSubmit() {
+
+    if (!this.form.valid) {
+      this.notificationService.sendMessage({
+        message: "All fields should not be empty",
+        type: NotificationType.warning
+      });
+      return;
+    }
+
     console.log("html content: ", this.form.get('htmlContent').value);
 
     this.loadingSignService.activate();
@@ -235,6 +249,7 @@ export class AddNoteComponent implements OnInit {
           type: NotificationType.success
         });
         this.loadingSignService.deactivate();
+        this.isDirty = false;
         this.router.navigate(['main']);
       }, error => {
         this.notificationService.sendMessage({

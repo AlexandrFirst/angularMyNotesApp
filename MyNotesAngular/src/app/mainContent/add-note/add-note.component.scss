@@ -20,6 +20,7 @@
     border-radius: 5px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: large;
+    padding: 5px 10px;
 }
 
 .btn-container > button[type="submit"]{
@@ -30,5 +31,6 @@
 .btn-container > button[type="button"]{
     background-color: #DC143C;
     color: white;
+    width: fit-content;
 
 }

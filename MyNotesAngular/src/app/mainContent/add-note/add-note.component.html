@@ -5,10 +5,10 @@
         
         <quill-editor formControlName="htmlContent" [modules]="modules"></quill-editor>
         <div class="btn-container">
-            <button type="button" (click)="deleteNote()" *ngIf="isEditingMode">
+            <button type="button" (click)="deleteNote()" style="background-color: orange;" *ngIf="isEditingMode">
                 Delete note
             </button>
-            <button type="button" (click)="cancelBtnClick()">
+            <button type="button" (click)="cancelBtnClick()" *ngIf="!isEditingMode">
                 Cancel
             </button>
             <button type="submit">

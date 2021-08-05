@@ -8,7 +8,8 @@ namespace MyNotesApi.DataContext.ModelConfiguration
         public void Configure(EntityTypeBuilder<Note> builder)
         {
             builder.HasMany(n => n.NoteImages)
-                   .WithOne(i => i.Note);
+                   .WithOne(i => i.Note).OnDelete(DeleteBehavior.Cascade);
+
 
             builder.HasMany(n => n.Likes)
                    .WithOne(l => l.Note);

@@ -29,7 +29,7 @@ export class PhotoService extends HttpService {
   }
 
   deletePhotoRange(pahotoIds: string[]) {
-    return this.http.post(this.baseUrl + "photo/deleteRange", pahotoIds);
+    return this.http.post(this.baseUrl + "photo/deleteRange", {ImageIds: pahotoIds});
   }
 }
 

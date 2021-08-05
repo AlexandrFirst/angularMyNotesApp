@@ -67,7 +67,12 @@ namespace MyNotesApi.Services
 
         public async Task<bool> DeleteNote(int noteId)
         {
-            var noteToRemove = await dbContext.Notes.FirstOrDefaultAsync(n => n.NoteId == noteId);
+            var noteToRemove = await dbContext.Notes.Include(u => u.Author).FirstOrDefaultAsync(n => n.NoteId == noteId);
+
+            var userId = userContext.GetUserContext().Id;
+            if(noteToRemove.Author.Id!=userId)
+                throw new UserNotFoundException();
+
             if (noteToRemove == null)
                 throw new NoteNotFoundException(noteId);
 

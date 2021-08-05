@@ -7,7 +7,7 @@
             <div class="actions">
                 <span class="fa fa-heart-o"><span>{{item.likes.length}}</span></span>
                 <span class="fa fa-share-square"><span>{{item.reposts.length}}</span></span>
-                <a href=""> <span class="fa fa-edit"></span></a>
+                <a (click)="editBtnClick(item.noteId)"><span class="fa fa-edit"></span></a>
             </div>
             <div class="author">
                 By {{item.author.name}}

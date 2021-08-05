@@ -1,6 +1,12 @@
-<app-header></app-header>
-<loading-sign></loading-sign>
-<div style="width: 100%; background-color: white;">
-    <router-outlet></router-outlet>
+<div style="min-height: 100%;
+display: flex;
+flex-direction: column;">
+    <app-header></app-header>
+    <loading-sign></loading-sign>
+    <div style="width: 100%; 
+        background-color: white; 
+        flex: 1 1 auto;">
+        <router-outlet></router-outlet>
+    </div>
 </div>
-<app-footer></app-footer> 
+<app-footer></app-footer>

@@ -30,6 +30,7 @@ export class AddNoteComponent implements OnInit {
 
   isDirty: boolean = false;
   isEditingMode: boolean = false;
+  noteId: number = -1;
 
   form = new FormGroup({
     titleImage: new FormControl(null, [Validators.required]),
@@ -48,17 +49,23 @@ export class AddNoteComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params.mode && params.mode == "editing" && params.noteid) {
 
+
+        this.noteId = params.noteid;
         this.noteService.getNote(params.noteid).subscribe((success: PostNoteRequest) => {
           this.isEditingMode = true;
+          console.log(params)
 
-          this.form.get("titleImage").setValue(success.TitleImage);
-          this.form.get("htmlContent").setValue(success.NoteText);
+          console.log(success)
+          this.form.get("titleImage").setValue(success.titleImage);
+          this.form.get("htmlContent").setValue(success.noteText);
         })
       }
     })
 
     this.form.valueChanges.subscribe(val => {
-      this.isDirty = true;
+      if (this.form.get("titleImage").value || this.form.get("htmlContent").value) {
+        this.isDirty = true;
+      }
     });
   }
 
@@ -66,89 +73,6 @@ export class AddNoteComponent implements OnInit {
 
   uploadedImages: UploadPhoto[] = [];
 
-  // editorConfig: AngularEditorConfig = {
-  //   editable: true,
-  //   spellcheck: true,
-  //   height: 'auto',
-  //   minHeight: '300px',
-  //   maxHeight: '600px',
-  //   width: 'auto',
-  //   translate: 'yes',
-  //   enableToolbar: true,
-  //   showToolbar: true,
-  //   placeholder: 'Enter text here...',
-  //   defaultParagraphSeparator: '',
-  //   defaultFontName: '',
-  //   defaultFontSize: '',
-  //   fonts: [
-  //     { class: 'arial', name: 'Arial' },
-  //     { class: 'times-new-roman', name: 'Times New Roman' },
-  //     { class: 'calibri', name: 'Calibri' },
-  //     { class: 'comic-sans-ms', name: 'Comic Sans MS' }
-  //   ],
-  //   customClasses: [
-  //     {
-  //       name: 'quote',
-  //       class: 'quote',
-  //     },
-  //     {
-  //       name: 'redText',
-  //       class: 'redText'
-  //     },
-  //     {
-  //       name: 'titleText',
-  //       class: 'titleText',
-  //       tag: 'h1',
-  //     },
-  //   ],
-  //   upload: (file: File) => {
-
-  //     let response = this.photoService.sendPhoto(file).pipe(map((elem: HttpResponse<UploadPhoto>) => {
-
-
-  //       if (elem.type == HttpEventType.Response) {
-  //         console.log("Photo response", elem);
-
-  //         const inputResponse = JSON.parse(JSON.stringify(elem.body)) as UploadPhoto;
-  //         this.uploadedImages.push(inputResponse);
-
-  //         let new_reponse: UploadResponse = {
-  //           imageUrl: inputResponse.imageUrl
-  //         }
-
-  //         let outputResponse: HttpResponse<UploadResponse> = {
-  //           body: new_reponse,
-  //           type: elem.type,
-  //           headers: elem.headers,
-  //           ok: elem.ok,
-  //           status: elem.status,
-  //           statusText: elem.statusText,
-  //           url: elem.url,
-  //           clone: elem.clone
-  //         }
-  //         console.log("Transformed photo response", outputResponse );
-  //         return outputResponse;
-  //       }
-  //       return elem;
-  //     }))
-
-  //     return response;
-  //   },
-  //   uploadWithCredentials: false,
-  //   sanitize: true,
-  //   toolbarPosition: 'top',
-  //   toolbarHiddenButtons: [
-  //     [],
-  //     [
-  //       'customClasses',
-  //       'link',
-  //       'unlink',
-  //       'insertVideo',
-  //       'insertHorizontalRule',
-  //       'removeFormat',
-  //       'toggleEditorMode']
-  //   ],
-  // };
 
   modules = {
     toolbar: [
@@ -237,12 +161,12 @@ export class AddNoteComponent implements OnInit {
 
     this.loadingSignService.activate();
 
-    if (this.form.get('titleImage').value) {
+    if (!this.isEditingMode) {
 
       this.noteService.postNote({
-        NoteText: this.form.get('htmlContent').value,
-        TitleImage: this.form.get('titleImage').value,
-        UploadImages: this.uploadedImages
+        noteText: this.form.get('htmlContent').value,
+        titleImage: this.form.get('titleImage').value,
+        uploadImages: this.uploadedImages
       }).subscribe(success => {
         this.notificationService.sendMessage({
           message: "Your note is succeesfully added",
@@ -263,10 +187,64 @@ export class AddNoteComponent implements OnInit {
       console.log(this.form.get('titleImage').value);
 
     }
+    else {
+      this.noteService.updateNote(this.noteId, {
+        noteText: this.form.get('htmlContent').value,
+        titleImage: this.form.get('titleImage').value,
+        uploadImages: this.uploadedImages
+      }).subscribe(success => {
+        this.notificationService.sendMessage({
+          message: "Your note is succeesfully added",
+          type: NotificationType.success
+        });
+        this.loadingSignService.deactivate();
+        this.isDirty = false;
+        this.router.navigate(['main']);
+      }, error => {
+        this.notificationService.sendMessage({
+          message: error.error.Message,
+          type: NotificationType.error
+        });
+
+        this.loadingSignService.deactivate();
+      })
+    }
+
   }
 
   cancelBtnClick() {
-    this.router.navigate(['main']);
+    if (!this.isEditingMode) {
+
+      this.loadingSignService.activate();
+
+      let deletePhotosRange:string[] = [];
+      
+      
+      this.uploadedImages.map(im => im.imagePublicId).forEach(elem => {
+        deletePhotosRange.push(elem);
+      })
+
+      if (this.form.get("titleImage").value) {
+        deletePhotosRange.push(this.form.get("titleImage").value.imagePublicId);
+      }
+
+      this.photoService.deletePhotoRange(deletePhotosRange).subscribe(next => {
+        this.loadingSignService.deactivate();
+        this.notificationService.sendMessage({
+          message: "Adding is cancelled",
+          type: NotificationType.info
+        });
+        this.isDirty = false;
+        this.router.navigate(['main']);
+      }, error => {
+        this.loadingSignService.deactivate();
+        this.notificationService.sendMessage({
+          message: "Smth went wrong! Try again",
+          type: NotificationType.warning
+        });
+      });
+    }
+
   }
 
   deleteNote() {
@@ -281,6 +259,7 @@ export class AddNoteComponent implements OnInit {
             message: "The note is deleted successfully",
             type: NotificationType.success
           });
+          this.isDirty = false;
           this.router.navigate(['main']);
         }, error => {
           this.loadingSignService.deactivate();

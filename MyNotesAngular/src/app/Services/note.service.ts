@@ -13,16 +13,19 @@ export class NoteService {
     return this.http.SendData("Post/newPost", noteBody);
   }
 
-  getNote(noteId){
+  getNote(noteId) {
     return this.http.GetData("Post/note/" + noteId);
   }
 
-  deleteNote(noteId){
+  deleteNote(noteId) {
     return this.http.DeleteData("Post/note/" + noteId);
   }
 
-  getMyNotes(){
+  getMyNotes() {
     return this.http.GetData("Post/allNotes");
   }
 
+  updateNote(noteId: number, noteBody: PostNoteRequest) {
+    return this.http.SendData("Post/note/update/" + noteId, noteBody);
+  }
 }

@@ -9,9 +9,12 @@
     width: 100%;
     padding: 10px;
     border-radius: 10px;
-    background: rgb(255, 255, 255);
-    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(142, 234, 252, 1) 0%, rgba(255, 255, 255, 1) 60%);
+    background: rgb(142, 234, 252, 1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    // background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(142, 234, 252, 1) 0%, rgba(255, 255, 255, 1) 60%);
 }
+
 
 .card > img {
     display: block;

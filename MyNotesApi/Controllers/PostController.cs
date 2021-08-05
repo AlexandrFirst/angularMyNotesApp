@@ -63,18 +63,30 @@ namespace MyNotesApi.Controllers
                 throw new NoteNotFoundException(noteId);
             }
 
-            return Ok(new {
-                note
-            });
+            return Ok(note);
         }
 
 
-        [HttpDelete("note/{noteId}")]
-        public async Task<IActionResult> DeleteNote(int noteId){
-            
-            await postService.DeleteNote(noteId);
+
+        [HttpPost("note/update/{noteId}")]
+        public async Task<IActionResult> UpdateNote(int noteId, PostNoteDto postNoteDto)
+        {
+            await DeleteNote(noteId);
+            await PostNote(postNoteDto);
 
             return Ok(new {
+                Message = "The post is updated"
+            });
+        }
+
+        [HttpDelete("note/{noteId}")]
+        public async Task<IActionResult> DeleteNote(int noteId)
+        {
+
+            await postService.DeleteNote(noteId);
+
+            return Ok(new
+            {
                 Message = "Done"
             });
         }

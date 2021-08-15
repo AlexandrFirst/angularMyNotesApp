@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserData } from '../Models/AuthResponse';
+import { clearAuthResponse, UserData } from '../Models/AuthResponse';
 import { httpHeaders } from '../Models/httpHeaders';
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,23 @@ export class HttpService {
   constructor(private client: HttpClient) { }
 
   GetToken() {
-    return localStorage.getItem(UserData.UserToken);
+    const helper = new JwtHelperService();
+    var token = localStorage.getItem(UserData.UserToken);
+
+    if (token) {
+      const isExpired = helper.isTokenExpired(token);
+
+      if (isExpired) {
+        clearAuthResponse();
+        return undefined;
+      }
+      else {
+        return token;
+      }
+    }
+    else {
+      return undefined;
+    }
   }
 
   GetName() {
@@ -32,15 +49,15 @@ export class HttpService {
         headers.append(header.name, header.value);
       }
     }
-    
+
     return this.client.post(this.baseUrl + url, body, { headers });
   }
 
-  GetData(url){
+  GetData(url) {
     return this.client.get(this.baseUrl + url);
   }
 
-  DeleteData(url){
+  DeleteData(url) {
     return this.client.delete(this.baseUrl + url)
   }
 }

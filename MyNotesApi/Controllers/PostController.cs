@@ -71,10 +71,14 @@ namespace MyNotesApi.Controllers
         [HttpPost("note/update/{noteId}")]
         public async Task<IActionResult> UpdateNote(int noteId, PostNoteDto postNoteDto)
         {
-            await DeleteNote(noteId);
-            await PostNote(postNoteDto);
+            // PostNoteDto note = await postService.GetNote(noteId);
+            // await DeleteNote(noteId);
+            // await PostNote(postNoteDto);
 
-            return Ok(new {
+            await postService.UpdateNote(noteId, postNoteDto.NoteText, postNoteDto.UploadImages, postNoteDto.TitleImage);
+
+            return Ok(new
+            {
                 Message = "The post is updated"
             });
         }

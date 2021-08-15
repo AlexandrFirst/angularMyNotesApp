@@ -32,6 +32,8 @@ export class AddNoteComponent implements OnInit {
   isEditingMode: boolean = false;
   noteId: number = -1;
 
+  uploadedImages: UploadPhoto[] = [];
+
   form = new FormGroup({
     titleImage: new FormControl(null, [Validators.required]),
     htmlContent: new FormControl(null, [Validators.required])
@@ -58,6 +60,8 @@ export class AddNoteComponent implements OnInit {
           console.log(success)
           this.form.get("titleImage").setValue(success.titleImage);
           this.form.get("htmlContent").setValue(success.noteText);
+
+          this.uploadedImages.push(...success.uploadImages);
         })
       }
     })
@@ -71,7 +75,7 @@ export class AddNoteComponent implements OnInit {
 
 
 
-  uploadedImages: UploadPhoto[] = [];
+  
 
 
   modules = {

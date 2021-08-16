@@ -5,6 +5,7 @@ using MyNotesApi.DTOs;
 using MyNotesApi.Helpers;
 using MyNotesApi.Helpers.ExceptionHandler.CustomExceptions;
 using MyNotesApi.ServiceProtos;
+using MyNotesApi.Extensions;
 
 namespace MyNotesApi.Controllers
 {
@@ -35,23 +36,28 @@ namespace MyNotesApi.Controllers
         }
 
         [HttpGet("allNotes/{userId?}")]
-        public async Task<IActionResult> GetMyNotes(int? userId)
+        public async Task<IActionResult> GetMyNotes(int? userId, [FromQuery] PageParams pageParams)
         {
 
-            List<NoteDto> response = new List<NoteDto>();
+            PagedList<NoteDto> response;
             if (userId == null)
             {
-                response = await postService.GetNotes();
+                response = await postService.GetNotes(pageParams);
             }
             else
             {
-                response = await postService.GetNotes(userId.Value);
+                response = await postService.GetNotes(userId.Value, pageParams);
             }
 
-            if (response.Count == 0)
+            if (response == null || response.Count == 0)
                 throw new NoteDownloadException(userContext.GetUserContext().Mail);
 
-            return Ok(response);
+            Response.AddPagination(response.CurrentPage,
+                                   response.PageSize,
+                                   response.TotalCount,
+                                   response.TotalPages);
+
+            return Ok(response as List<NoteDto>);
         }
 
         [HttpGet("note/{noteId}")]

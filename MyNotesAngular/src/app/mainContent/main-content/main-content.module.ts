@@ -7,6 +7,7 @@ import { NotesComponent } from '../notes/notes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { UserChatsComponent } from '../user-chats/user-chats.component';
@@ -39,6 +40,7 @@ import { QuillModule } from 'ngx-quill';
     ReactiveFormsModule,
     MatSliderModule,
     MatIconModule,
+    MatPaginatorModule,
     AngularEditorModule,
     MatProgressBarModule,
     QuillModule,

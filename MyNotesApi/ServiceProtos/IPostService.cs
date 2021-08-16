@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MyNotesApi.DTOs;
+using MyNotesApi.Helpers;
 
 namespace MyNotesApi.ServiceProtos
 {
@@ -11,7 +12,7 @@ namespace MyNotesApi.ServiceProtos
         Task UpdateNote(int noteId, string noteText, List<ImageDto> uploadImages, ImageDto titleImage);
         Task<bool> DeleteNote(int noteId);
         Task<PostNoteDto> GetNote(int noteId);
-        Task<List<NoteDto>> GetNotes(int userId);
-        Task<List<NoteDto>> GetNotes();
+        Task<PagedList<NoteDto>> GetNotes(int userId, PageParams pageParams);
+        Task<PagedList<NoteDto>> GetNotes(PageParams pageParams);
     }
 }

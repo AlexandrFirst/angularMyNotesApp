@@ -1,7 +1,9 @@
+<mat-paginator [pageIndex] = "pageIndex" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOption" (page)="pageEvent($event)" aria-label="Select page">
+</mat-paginator>
 <div *ngIf="notes.length > 0; else no_notes_count">
     <div class="card" *ngFor="let item of notes">
         <img src={{item.titleImage.imageUrl}} />
-        <div class="main-content" [innerHTML] = "item.content">
+        <div class="main-content" [innerHTML]="item.content">
         </div>
         <div class="footer">
             <div class="actions">
@@ -28,3 +30,5 @@
 <div class="add-button">
     <a routerLink="../add" class="fa fa-plus"></a>
 </div>
+<mat-paginator [pageIndex] = "pageIndex" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOption" (page)="pageEvent($event)" aria-label="Select page">
+</mat-paginator>

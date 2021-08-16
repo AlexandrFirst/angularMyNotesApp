@@ -9,7 +9,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 })
 export class HttpService {
 
-  protected baseUrl = "http://localhost:5000/";
+  public baseUrl = "http://localhost:5000/";
 
   constructor(private client: HttpClient) { }
 

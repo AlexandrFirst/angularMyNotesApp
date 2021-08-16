@@ -11,6 +11,7 @@ using System;
 using AutoMapper;
 using MyNotesApi.Helpers.ExceptionHandler.CustomExceptions;
 using MyNotesApi.Models;
+using MyNotesApi.Helpers;
 
 namespace MyNotesApi.Services
 {
@@ -139,11 +140,11 @@ namespace MyNotesApi.Services
             return note_dto;
         }
 
-        public async Task<List<NoteDto>> GetNotes(int userId)
+        public async Task<PagedList<NoteDto>> GetNotes(int userId, PageParams pageParams)
         {
             var userWithNotes = await dbContext.Users.Where(u => u.Id == userId).Include(n => n.Notes)
                                                         .ThenInclude(p => p.NoteImages.Where(d => d.IsTitleImage)).FirstOrDefaultAsync();
-
+            
             if (userWithNotes == null)
             {
                 throw new UserNotFoundException();
@@ -151,15 +152,16 @@ namespace MyNotesApi.Services
 
             var notesDB = userWithNotes.Notes;
 
-            var notesToReturn = mapper.Map<List<NoteDto>>(notesDB);
+            var notesToReturn = mapper.Map<ICollection<NoteDto>>(notesDB);
 
-            return notesToReturn;
+            return PagedList<NoteDto>.CreateAsync(notesToReturn.AsQueryable(), pageParams.PageNumber, pageParams.PageSize);
+            // return notesToReturn;
 
         }
 
-        public async Task<List<NoteDto>> GetNotes()
+        public async Task<PagedList<NoteDto>> GetNotes(PageParams pageParams)
         {
-            return await GetNotes(userContext.GetUserContext().Id);
+            return await GetNotes(userContext.GetUserContext().Id, pageParams);
         }
 
         private List<string> filterInputImgSrc(string htmlContent, List<string> LoadedImages)

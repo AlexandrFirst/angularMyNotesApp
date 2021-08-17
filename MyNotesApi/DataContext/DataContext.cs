@@ -15,7 +15,7 @@ namespace MyNotesApi.DataContext
 
         public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
         {
-            if (Database.EnsureCreated()) Database.Migrate();
+            Database.Migrate();
             this.ChangeTracker.LazyLoadingEnabled = false;
         }
         private readonly DatabaseSettings dbSettings;

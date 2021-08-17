@@ -114,10 +114,15 @@ namespace MyNotesApi
             // app.UseAuthentication();
             // app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

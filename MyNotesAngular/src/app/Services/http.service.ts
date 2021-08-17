@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { clearAuthResponse, UserData } from '../Models/AuthResponse';
 import { httpHeaders } from '../Models/httpHeaders';
 import { JwtHelperService } from "@auth0/angular-jwt";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  public baseUrl = "http://localhost:5000/";
+  public baseUrl = environment.apiUrl;
 
   constructor(private client: HttpClient) { }
 

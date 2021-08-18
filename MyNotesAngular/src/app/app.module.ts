@@ -21,7 +21,7 @@ import { MainContentGuard } from './route-guard/main-content.guard';
 import { LoginGuard } from './route-guard/login.guard';
 import { AddHeaderInterceptor } from './Interceptors/addHeadersInterceptor';
 import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerInterceptor';
-import { QuillModule } from 'ngx-quill'
+import { QuillModule } from 'ngx-quill';
 
 
 @NgModule({

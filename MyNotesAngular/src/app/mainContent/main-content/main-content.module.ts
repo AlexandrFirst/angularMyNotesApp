@@ -22,6 +22,7 @@ import { SubMainContentGuard } from 'src/app/route-guard/sub-main-content.guard'
 import {MatProgressBarModule} from '@angular/material/progress-bar'
 import { LeaveAddNoteGuard } from '../route-guards/leave-add-note.guard';
 import { QuillModule } from 'ngx-quill';
+import { OtherUserListComponent } from '../other-user-list/other-user-list.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { QuillModule } from 'ngx-quill';
     UserChatsComponent,
     AdminAnaliticComponent,
     LikedPostsComponent,
-    SettingsComponent
+    SettingsComponent,
+    OtherUserListComponent
   ],
   imports: [
     CommonModule,
@@ -52,6 +54,7 @@ import { QuillModule } from 'ngx-quill';
       {path: 'userchats', component: UserChatsComponent},
       {path: 'analitics', component: AdminAnaliticComponent},
       {path: 'settings', component: SettingsComponent},
+      {path: 'otherUsers', component: OtherUserListComponent},
       {path: '',  redirectTo: 'notes', pathMatch: 'full'},
       {path: '**',  redirectTo: 'notes', pathMatch: 'full'}
     ])

@@ -23,6 +23,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar'
 import { LeaveAddNoteGuard } from '../route-guards/leave-add-note.guard';
 import { QuillModule } from 'ngx-quill';
 import { OtherUserListComponent } from '../other-user-list/other-user-list.component';
+import { ThreeStateToggleSwitchComponent } from 'src/app/three-state-toggle-switch/three-state-toggle-switch.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { OtherUserListComponent } from '../other-user-list/other-user-list.compo
     AdminAnaliticComponent,
     LikedPostsComponent,
     SettingsComponent,
-    OtherUserListComponent
+    OtherUserListComponent,
+    ThreeStateToggleSwitchComponent
   ],
   imports: [
     CommonModule,

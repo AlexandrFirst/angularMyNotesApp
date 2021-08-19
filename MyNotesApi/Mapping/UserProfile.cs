@@ -10,6 +10,9 @@ namespace MyNotesApi.Mapping
         {
             CreateMap<UserRegister, User>();
             CreateMap<User, UserPostDto>();
+            CreateMap<User, UserListInstance>()
+                .ForMember(u => u.FollowersCount, opt => opt.MapFrom(m => m.Followers.Count))
+                .ForMember(u => u.SubscribersCount, opt => opt.MapFrom(m => m.Subscribers.Count));
         }
     }
 }

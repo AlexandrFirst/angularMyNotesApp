@@ -1,69 +1,66 @@
 @import url("https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400;500&display=swap");
 
-
 .search-bar-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 30rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 30rem;
 }
 
 .search-bar {
-    background: var(--color-brand);
-    border-radius: var(--rad);
-    position: relative;
+  background: var(--color-brand);
+  border-radius: var(--rad);
+  position: relative;
 }
 input,
 button {
-    height: var(--height);
-    font-family: var(--font-fam);
-    border: 0;
-    color: var(--color-dark);
-    font-size: 1.3rem;
+  height: var(--height);
+  font-family: var(--font-fam);
+  border: 0;
+  color: var(--color-dark);
+  font-size: 1.3rem;
 }
 
 input[type="search"] {
-    outline: 0; // <-- shold probably remove this for better accessibility, adding for demo aesthetics for now.
-    width: 100%;
-    background: var(--color-light);
-    padding: 0 1.6rem;
-    border-radius: var(--rad);
-    appearance: none; //for iOS input[type="search"] roundedness issue. border-radius alone doesn't work
-    transition: all var(--dur) var(--bez);
-    transition-property: width, border-radius;
-    z-index: 1;
-    position: relative;
+  outline: 0; // <-- shold probably remove this for better accessibility, adding for demo aesthetics for now.
+  width: 100%;
+  background: var(--color-light);
+  padding: 0 1.6rem;
+  border-radius: var(--rad);
+  appearance: none; //for iOS input[type="search"] roundedness issue. border-radius alone doesn't work
+  transition: all var(--dur) var(--bez);
+  transition-property: width, border-radius;
+  z-index: 1;
+  position: relative;
 }
 
 button {
-    display: none; // prevent being able to tab to it
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: var(--btn-width);
-    font-weight: bold;
-    background: var(--color-brand);
-    border-radius: 0 var(--rad) var(--rad) 0;
+  display: none; // prevent being able to tab to it
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--btn-width);
+  font-weight: bold;
+  background: var(--color-brand);
+  border-radius: 0 var(--rad) var(--rad) 0;
 }
 
 input:not(:placeholder-shown) {
-    border-radius: var(--rad) 0 0 var(--rad);
-    width: calc(100% - var(--btn-width));
-    + button {
-        display: block;
-    }
+  border-radius: var(--rad) 0 0 var(--rad);
+  width: calc(100% - var(--btn-width));
+  + button {
+    display: block;
+  }
 }
 
-
-
 .container {
-margin-top: 40px;
+  margin-top: 40px;
   display: grid;
   grid-template-columns: 300px 300px 300px;
   grid-gap: 50px;
   justify-content: center;
   align-items: center;
-  font-family: 'Baloo Paaji 2', cursive;
+  font-family: "Baloo Paaji 2", cursive;
 }
 
 .card {
@@ -91,7 +88,6 @@ margin-top: 40px;
   box-shadow: 0 10px 50px rgb(46, 25, 235);
 }
 
-
 .draw-border {
   box-shadow: inset 0 0 0 4px #58cdd1;
   color: #58afd1;
@@ -104,7 +100,7 @@ margin-top: 40px;
 .draw-border::after {
   border: 0 solid transparent;
   box-sizing: border-box;
-  content: '';
+  content: "";
   pointer-events: none;
   position: absolute;
   width: 0rem;
@@ -151,7 +147,7 @@ margin-top: 40px;
   border: none;
   cursor: pointer;
   line-height: 1.5;
-  font: 700 1.2rem 'Roboto Slab', sans-serif;
+  font: 700 1.2rem "Roboto Slab", sans-serif;
   padding: 0.75em 2em;
   letter-spacing: 0.05rem;
   margin: 1em;
@@ -161,7 +157,6 @@ margin-top: 40px;
 .btn:focus {
   outline: 2px dotted #55d7dc;
 }
-
 
 .social-icons {
   padding: 0;
@@ -222,4 +217,11 @@ margin-top: 40px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 15px;
   font-size: 1.2em;
+}
+
+.toggle-switch-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

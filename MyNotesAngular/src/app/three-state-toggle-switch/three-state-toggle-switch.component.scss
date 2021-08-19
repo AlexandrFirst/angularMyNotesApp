@@ -1,0 +1,54 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400;500&display=swap");
+.toggle {
+    background: #a0f7f7;
+    border: 0px solid #ccc;
+    border-radius: 30px;
+    display: inline-block;
+    padding: 20px 0;
+    position: relative;
+  }
+  
+  input[type="radio"] {
+    display: none;
+  }
+  
+  label {
+    width: 150px;
+    display: inline-block;
+    text-align: center;
+    z-index: 5;
+    position: relative;
+    cursor: pointer;
+    color: white;
+    font-family: "Baloo Paaji 2";
+    font-size: larger;
+    font-weight: 500;
+  }
+  
+  .selector {
+    height: 55px;
+    width: 150px;
+    border-radius: 30px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 1;
+    transition: left 0.25s ease-in-out;
+  }
+  
+  .license-plate:checked ~ .selector {
+    left: 2px;
+    background-color: orange;
+  }
+  
+  .make-model:checked ~ .selector {
+    left: 154px;
+    background-color: green;
+  }
+  
+  .vin:checked ~ .selector {
+    left: 306px;
+    background-color: #26caeb;
+  }
+  

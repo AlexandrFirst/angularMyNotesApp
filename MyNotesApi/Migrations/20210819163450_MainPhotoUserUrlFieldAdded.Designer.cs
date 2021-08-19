@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyNotesApi.DataContext;
 
 namespace MyNotesApi.Migrations
 {
     [DbContext(typeof(MyDataContext))]
-    partial class MyDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210819163450_MainPhotoUserUrlFieldAdded")]
+    partial class MainPhotoUserUrlFieldAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,21 +151,6 @@ namespace MyNotesApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserUser", b =>
-                {
-                    b.Property<int>("FollowersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubscribersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FollowersId", "SubscribersId");
-
-                    b.HasIndex("SubscribersId");
-
-                    b.ToTable("UserUser");
-                });
-
             modelBuilder.Entity("MyNotesApi.DataContext.Image", b =>
                 {
                     b.HasOne("MyNotesApi.DataContext.Note", "Note")
@@ -211,21 +198,6 @@ namespace MyNotesApi.Migrations
                     b.Navigation("Note");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("UserUser", b =>
-                {
-                    b.HasOne("MyNotesApi.DataContext.User", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyNotesApi.DataContext.User", null)
-                        .WithMany()
-                        .HasForeignKey("SubscribersId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>

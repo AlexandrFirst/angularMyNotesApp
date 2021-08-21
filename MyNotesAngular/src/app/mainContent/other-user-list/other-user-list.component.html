@@ -1,30 +1,30 @@
 <div class="search-bar-container">
     <div class="search-bar">
-        <input type="search" placeholder="Search..." autofocus required />
+        <input type="search" #searchInput placeholder="Search..." autofocus required />
         <button type="submit">Go</button>
     </div>
 </div>
 
 <div class="toggle-switch-container">
-    <app-three-state-toggle-switch></app-three-state-toggle-switch>
+    <app-three-state-toggle-switch (value)="OnToggleValueChanaged($event);"></app-three-state-toggle-switch>
 </div>
 
 <div class="container">
-    <div class="card">
+    <div class="card" *ngFor="let user of userList">
         <img src="https://lh3.googleusercontent.com/oUUiPB9sq3ACq4bUaRmo8pgvC4FUpRRrQKcGIBSOsafawZfRpF1vruFeYt6uCfL6wGDQyvOi6Ez9Bpf1Fb7APKjIyVsft7FLGR6QqdRFTiceNQBm1In9aZyrXp33cZi9pUNqjHASdA=s170-no"
             alt="Person" class="card__image">
-        <p class="card__name">Murray Reeve</p>
+        <p class="card__name">{{user.name}}</p>
         <div class="grid-container">
 
             <div class="grid-child-posts">
-                305 Post
+                {{user.postCount}} Post
             </div>
 
             <div class="grid-child-followers">
-                2643 follow.
+                {{user.followersCount}} follow.
             </div>
             <div class="grid-child-followers">
-                2643 subs.
+                {{user.subscribersCount}} subs.
             </div>
 
             

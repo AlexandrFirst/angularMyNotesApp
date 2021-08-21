@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyNotesApi.DataContext;
 using MyNotesApi.DTOs;
+using MyNotesApi.Extensions;
 using MyNotesApi.Helpers;
 using MyNotesApi.Helpers.ExceptionHandler.CustomExceptions;
 using MyNotesApi.Models;
@@ -60,12 +61,26 @@ namespace MyNotesApi.Controllers
         [HttpGet("findUser")]
         public async Task<IActionResult> GetUsers([FromQuery] SearchUserParams searchParams)
         {
-            List<UserListInstance> UserListResponse = new List<UserListInstance>();
+            PagedList<UserListInstance> UserListResponse = null;
+            IEnumerable<User> response = null;
+
+            if(searchParams.SearchPattern == null)
+            {
+                return Ok();
+            }
 
             if (searchParams.IsSubscribed.HasValue)
             {
                 int userId = userContext.GetUserContext().Id;
-                var currentUser = await dbConext.Users.Include(m => m.Followers).Include(m => m.Subscribers).Where(u => u.Id == userId).FirstOrDefaultAsync();
+                var currentUser = await dbConext.Users.Include(m => m.Followers)
+                                                            .ThenInclude(f => f.Followers)
+                                                            .ThenInclude(s => s.Subscribers)
+                                                            .ThenInclude(n => n.Notes)
+                                                      .Include(m => m.Subscribers)
+                                                            .ThenInclude(f => f.Followers)
+                                                            .ThenInclude(s => s.Subscribers)
+                                                            .ThenInclude(n => n.Notes)
+                                                      .Where(u => u.Id == userId).FirstOrDefaultAsync();
 
                 if (currentUser == null)
                 {
@@ -74,24 +89,38 @@ namespace MyNotesApi.Controllers
 
                 if (searchParams.IsSubscribed.Value)
                 {
-                    var response = currentUser.Followers.Where(u => u.Name.Contains(searchParams.SearchPattern) || u.Mail.Contains(searchParams.SearchPattern));
-                    UserListResponse = mapper.Map<List<UserListInstance>>(response);
+                    response = currentUser.Followers.Where(u => u.Name.Contains(searchParams.SearchPattern) || u.Mail.Contains(searchParams.SearchPattern));
                 }
                 else
                 {
-                    var response = currentUser.Subscribers.Where(u => u.Name.Contains(searchParams.SearchPattern) || u.Mail.Contains(searchParams.SearchPattern));
-                    UserListResponse = mapper.Map<List<UserListInstance>>(response);
+                    response = currentUser.Subscribers.Where(u => u.Name.Contains(searchParams.SearchPattern) || u.Mail.Contains(searchParams.SearchPattern));
                 }
             }
             else
             {
-                var response = dbConext.Users.Where(u => u.Name.Contains(searchParams.SearchPattern) || u.Mail.Contains(searchParams.SearchPattern));
-                UserListResponse = mapper.Map<List<UserListInstance>>(response);
+                response = dbConext.Users.Include(u => u.Followers).Include(m => m.Subscribers).Include(n => n.Notes).Where(u => u.Name.ToLower().Contains(searchParams.SearchPattern.ToLower()) ||
+                                                     u.Mail.Contains(searchParams.SearchPattern));
             }
-            if (UserListResponse.Count == 0)
-                throw new Exception("No users found");
+
+            UserListResponse = UserlistToUserlistResponse(response, searchParams.PageNumber, searchParams.PageSize);
+
+            // if (UserListResponse == null || UserListResponse.Count == 0)
+            //     return new List<UserListInstance>();
+
+
+            Response.AddPagination(UserListResponse.CurrentPage,
+                                   UserListResponse.PageSize,
+                                   UserListResponse.TotalCount,
+                                   UserListResponse.TotalPages);
 
             return Ok(UserListResponse);
+        }
+
+        private PagedList<UserListInstance> UserlistToUserlistResponse(IEnumerable<User> response, int pageNumber, int pageSize)
+        {
+            var responseDto = mapper.Map<List<UserListInstance>>(response);
+
+            return PagedList<UserListInstance>.CreateAsync(responseDto.AsQueryable(), pageNumber, pageSize);
         }
     }
 }

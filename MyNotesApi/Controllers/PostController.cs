@@ -50,7 +50,12 @@ namespace MyNotesApi.Controllers
             }
 
             if (response == null || response.Count == 0)
+            {
+                if (userId.HasValue)
+                    throw new NoteDownloadException("selected user");
                 throw new NoteDownloadException(userContext.GetUserContext().Mail);
+
+            }
 
             Response.AddPagination(response.CurrentPage,
                                    response.PageSize,

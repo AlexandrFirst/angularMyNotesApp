@@ -22,6 +22,7 @@ import { LoginGuard } from './route-guard/login.guard';
 import { AddHeaderInterceptor } from './Interceptors/addHeadersInterceptor';
 import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerInterceptor';
 import { QuillModule } from 'ngx-quill';
+import { ChatRoomComponent } from './mainContent/chat-room/chat-room.component';
 
 
 @NgModule({

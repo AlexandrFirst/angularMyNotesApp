@@ -1,0 +1,51 @@
+.card:first-child {
+    margin-top: 20px;
+}
+
+.card {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border: 1px solid #1ac7ea;
+    border-radius: 20px;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    font-size: xx-large;
+    padding: 10px;
+}
+
+.user-name {
+    width: 50%;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+.user-status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: orange;
+}
+
+.user-status-active{
+    background-color: greenyellow;
+}
+
+.user-status-inactive{
+    background-color: red;
+}
+
+
+
+.actions {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.actions i {
+    margin-right: 20px;
+}

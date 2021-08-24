@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LoadingSignService } from 'src/app/loading-sign/loading-sign.service';
+import { UserData } from 'src/app/Models/AuthResponse';
 import { NoteDto } from 'src/app/Models/NoteDto';
 import { PaginatedResult } from 'src/app/Models/Pagination';
 import { NoteService } from 'src/app/Services/note.service';
@@ -13,7 +14,7 @@ import { NoteService } from 'src/app/Services/note.service';
 })
 export class NotesComponent implements OnInit {
 
-  length = 100;
+  length = 0;
   pageSize = 1;
   pageSizeOption = [1, 2, 5, 10, 25, 100]
   pageIndex = 0;
@@ -22,15 +23,19 @@ export class NotesComponent implements OnInit {
 
   notes: NoteDto[] = [];
 
+  isMyNotes: boolean = true;
+  userId: number = null;
+
   constructor(
     private noteService: NoteService,
     private loadingSignService: LoadingSignService,
-    private router: Router) { }
+    private router: Router,
+    private route: ActivatedRoute) { }
 
 
-  loadImages(pageIndex, pageSize) {
+  loadNotes(pageIndex, pageSize) {
     this.loadingSignService.activate();
-    this.noteService.getMyNotes(pageIndex, pageSize).subscribe((notes: PaginatedResult<NoteDto[]>) => {
+    this.noteService.getMyNotes(pageIndex, pageSize, this.userId).subscribe((notes: PaginatedResult<NoteDto[]>) => {
       console.log(this.notes);
       this.notes = notes.result;
       this.pageIndex = notes.pagination.currentPage - 1;
@@ -45,7 +50,25 @@ export class NotesComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.loadImages(this.actualPageIndex, this.pageSize);
+    var userId = null;
+    this.route.params.subscribe((params: Params) => {
+      if (params.userId){
+        userId = +params.userId;
+        console.log(userId);
+      }
+    })
+
+    if (userId == null) {
+      this.isMyNotes = true;
+      this.userId = null;
+      console.log("user id = null")
+    } else {
+      this.userId = +userId;
+      this.isMyNotes = (this.userId == +localStorage.getItem(UserData.UserId));
+      console.log(this.userId, "user id != null");
+    }
+
+    this.loadNotes(this.actualPageIndex, this.pageSize);
   }
 
 
@@ -62,7 +85,7 @@ export class NotesComponent implements OnInit {
     console.log(this.pageIndex)
     console.log(this.actualPageIndex)
 
-    this.loadImages(this.actualPageIndex, this.pageSize);
+    this.loadNotes(this.actualPageIndex, this.pageSize);
 
     console.log($event);
   }

@@ -24,6 +24,7 @@ import { LeaveAddNoteGuard } from '../route-guards/leave-add-note.guard';
 import { QuillModule } from 'ngx-quill';
 import { OtherUserListComponent } from '../other-user-list/other-user-list.component';
 import { ThreeStateToggleSwitchComponent } from 'src/app/three-state-toggle-switch/three-state-toggle-switch.component';
+import { ChatRoomComponent } from '../chat-room/chat-room.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ThreeStateToggleSwitchComponent } from 'src/app/three-state-toggle-swit
     LikedPostsComponent,
     SettingsComponent,
     OtherUserListComponent,
-    ThreeStateToggleSwitchComponent
+    ThreeStateToggleSwitchComponent,
+    ChatRoomComponent
   ],
   imports: [
     CommonModule,
@@ -50,10 +52,12 @@ import { ThreeStateToggleSwitchComponent } from 'src/app/three-state-toggle-swit
     QuillModule,
     RouterModule.forChild([
       {path: 'notes', component: NotesComponent},
+      {path: 'notes/:userId', component: NotesComponent},
       {path: 'add', component: AddNoteComponent, canDeactivate: [LeaveAddNoteGuard]},
       {path: 'likedposts', component: LikedPostsComponent},
       {path: 'userprofile', component: UserProfileComponent},
       {path: 'userchats', component: UserChatsComponent},
+      {path: 'userchats/:userId', component: ChatRoomComponent},
       {path: 'analitics', component: AdminAnaliticComponent},
       {path: 'settings', component: SettingsComponent},
       {path: 'otherUsers', component: OtherUserListComponent},

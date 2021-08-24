@@ -27,7 +27,7 @@ export class NoteService {
     return this.http.DeleteData("Post/note/" + noteId);
   }
 
-  getMyNotes(page?, itemsPerPage?) {
+  getMyNotes(page?, itemsPerPage?, userId?) {
 
     const paginatedResult: PaginatedResult<NoteDto[]> = new PaginatedResult<NoteDto[]>();
     let params = new HttpParams();
@@ -36,7 +36,7 @@ export class NoteService {
       params = params.append('pageSize', itemsPerPage);
     }
 
-    return this.client.get<NoteDto[]>(this.http.baseUrl + "Post/allNotes", {observe: 'response', params}).pipe(
+    return this.client.get<NoteDto[]>(this.http.baseUrl + "Post/allNotes" + (userId == null? "" : "/" + userId), { observe: 'response', params }).pipe(
       map(response => {
         paginatedResult.result = response.body;
         if (response.headers.get('Pagination') != null) {

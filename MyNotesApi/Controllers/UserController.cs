@@ -74,12 +74,12 @@ namespace MyNotesApi.Controllers
                 int userId = userContext.GetUserContext().Id;
                 var currentUser = await dbConext.Users.Include(m => m.Followers)
                                                             .ThenInclude(f => f.Followers)
-                                                            .ThenInclude(s => s.Subscribers)
-                                                            .ThenInclude(n => n.Notes)
+                                                            .Include(s => s.Subscribers)
+                                                            .Include(n => n.Notes)
                                                       .Include(m => m.Subscribers)
                                                             .ThenInclude(f => f.Followers)
-                                                            .ThenInclude(s => s.Subscribers)
-                                                            .ThenInclude(n => n.Notes)
+                                                            .Include(s => s.Subscribers)
+                                                            .Include(n => n.Notes)
                                                       .Where(u => u.Id == userId).FirstOrDefaultAsync();
 
                 if (currentUser == null)

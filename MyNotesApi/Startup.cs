@@ -13,6 +13,7 @@ using MyNotesApi.Services;
 using MyNotesApi.Helpers;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
+using MyNotesApi.MyHub;
 using Microsoft.EntityFrameworkCore;
 using MyNotesApi.Helpers.ExceptionHandler;
 using Microsoft.Extensions.Options;
@@ -69,6 +70,7 @@ namespace MyNotesApi
             services.AddCors();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
+            services.AddSignalR();
 
             services.AddControllers();
 
@@ -82,6 +84,7 @@ namespace MyNotesApi
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             services.AddControllers().AddNewtonsoftJson(o =>
             {
@@ -118,6 +121,7 @@ namespace MyNotesApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MyHub.MyHub>("/chat");
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
 

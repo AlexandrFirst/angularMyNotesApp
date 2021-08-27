@@ -32,6 +32,16 @@ namespace MyNotesApi.Helpers
 
                 attachUserToContext(context, authService, token_str);
             }
+            else
+            {
+                var request = context.Request;
+                if (request.Path.StartsWithSegments("/chat", StringComparison.OrdinalIgnoreCase) &&
+                request.Query.TryGetValue("access_token", out var accessToken))
+                {
+                    attachUserToContext(context, authService, accessToken);
+                }
+            }
+
             await next(context);
         }
 

@@ -6,3 +6,9 @@ export class UserListInstance {
     public subscribersCount: number;
     public postCount: number;
 }
+
+export class UserListChatInstance {
+    public id: number;
+    public name: string;
+    public mainPhotoUrl: string;
+}

@@ -75,7 +75,10 @@ namespace MyNotesApi
             });
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
             services.AddControllers();
 
@@ -115,13 +118,14 @@ namespace MyNotesApi
 
 
             app.UseRouting();
+            //app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseMiddleware<JwtMiddleware>();
 
             //app.UseAuthentication();
             // app.UseAuthorization();
 
-
+            app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

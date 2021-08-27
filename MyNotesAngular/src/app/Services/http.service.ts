@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 export class HttpService {
 
   public baseUrl = environment.apiUrl;
+  public baseUrlSecured = environment.apiUrlSecured;
 
   constructor(private client: HttpClient) { }
 

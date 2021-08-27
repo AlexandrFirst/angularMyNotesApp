@@ -1,5 +1,3 @@
-
-
 export enum UserData {
     UserId = "user-id",
     UserToken = "user-token",

@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { PaginatedResult } from '../Models/Pagination';
-import { UserListInstance } from '../Models/UserListInstance';
+import { ExecutePaginatedQuery, PaginatedResult } from '../Models/Pagination';
+import { UserListChatInstance, UserListInstance } from '../Models/UserListInstance';
 import { UserLogin } from '../Models/UserLogin';
 import { UserRegistration } from '../Models/UserRegistration';
 import { HttpService } from './http.service';
@@ -41,30 +41,21 @@ export class UserService {
   }
 
   GetOtherUserList(searchPattern, isSubscribed, page?) {
-    console.log(searchPattern);
-    const paginatedResult: PaginatedResult<UserListInstance[]> = new PaginatedResult<UserListInstance[]>();
-    let params = new HttpParams();
+    return ExecutePaginatedQuery<UserListInstance>(this.client,
+      this.http.baseUrl + "User/findUser",
+      page, //pageIndex
+      50,   //pageSize
+      { name: "searchPattern", value: searchPattern },
+      { name: "isSubscribed", value: isSubscribed });
+  }
 
-    if (page != null) {
-      params = params.append('pageNumber', page);
-      params = params.append('pageSize', "50");
-    }
-    
 
-    params = params.append('searchPattern', searchPattern);
-
-    if (isSubscribed != null)
-      params = params.append('isSubscribed', isSubscribed);
-
-    return this.client.get<UserListInstance[]>(this.http.baseUrl + "User/findUser", { observe: 'response', params }).pipe(
-      map(response => {
-        paginatedResult.result = response.body;
-        if (response.headers.get('Pagination') != null) {
-          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-
-        return paginatedResult;
-      })
+  GetOtherUserChatList(searchPattern, page?) {
+    return ExecutePaginatedQuery<UserListInstance>(this.client,
+      this.http.baseUrl + "Message/UserChatRooms",
+      page,
+      50,
+      { name: "searchQuery", value: searchPattern },
     );
   }
 }

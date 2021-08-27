@@ -8,21 +8,17 @@
     </div>
 </div>
 <div class="message-container">
-    <div class="message my-message">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores corporis culpa minima omnis harum veritatis
-        voluptates id eius quod hic eligendi commodi, provident numquam ab non nisi cupiditate, natus laudantium.
+    <div class="message" *ngFor="let message of messages"
+        [ngClass]="{'my-message': message.IsMyMessage, 'other-message': !message.IsMyMessage}">
+        {{message.MessageText}}
     </div>
-    <div class="message other-message">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores corporis culpa minima omnis harum veritatis
-        voluptates id eius quod hic eligendi commodi, provident numquam ab non nisi cupiditate, natus laudantium.
-    </div>
-    <div class="message other-message">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores corporis culpa minima omnis harum veritatis
-        voluptates id eius quod hic eligendi commodi, provident numquam ab non nisi cupiditate, natus laudantium.
-    </div>
-    <div class="message my-message">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores corporis culpa minima omnis harum veritatis
-        voluptates id eius quod hic eligendi commodi, provident numquam ab non nisi cupiditate, natus laudantium.
+    <div *ngIf="messages.length <= 0" style="display: flex; 
+                                            justify-content: center;
+                                            align-items: center;
+                                            text-align: center;
+                                            font-size: xx-large;
+                                            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+        you haven't send any messages yet
     </div>
 </div>
 <div class="input-container">

@@ -67,10 +67,13 @@ namespace MyNotesApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            //services.AddCors();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
             services.AddControllers();
 
@@ -105,11 +108,8 @@ namespace MyNotesApi
 
             app.ConfigureCustomExceptionMiddleware();
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
-
-
             app.UseRouting();
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseMiddleware<JwtMiddleware>();
 
@@ -117,7 +117,7 @@ namespace MyNotesApi
             // app.UseAuthentication();
             // app.UseAuthorization();
 
-
+            app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

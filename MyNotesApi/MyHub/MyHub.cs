@@ -6,7 +6,6 @@ using MyNotesApi.ServiceProtos;
 
 namespace MyNotesApi.MyHub
 {
-    [Authorize]
     public class MyHub : Hub
     {
         private readonly IMessageService messageService;
@@ -22,7 +21,7 @@ namespace MyNotesApi.MyHub
         public override async Task OnConnectedAsync()
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, userContext.GetUserContext().Id.ToString());
-
+            Console.WriteLine("User with id: " + Context.ConnectionId + " connected");
             await base.OnConnectedAsync();
         }
 

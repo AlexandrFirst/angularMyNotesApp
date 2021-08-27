@@ -52,23 +52,24 @@ export class NotesComponent implements OnInit {
   ngOnInit(): void {
     var userId = null;
     this.route.params.subscribe((params: Params) => {
-      if (params.userId){
+      if (params.userId) {
         userId = +params.userId;
         console.log(userId);
       }
+
+      if (userId == null) {
+        this.isMyNotes = true;
+        this.userId = null;
+        console.log("user id = null")
+      } else {
+        this.userId = +userId;
+        this.isMyNotes = (this.userId == +localStorage.getItem(UserData.UserId));
+        console.log(this.userId, "user id != null");
+      }
+
+      this.loadNotes(this.actualPageIndex, this.pageSize);
     })
 
-    if (userId == null) {
-      this.isMyNotes = true;
-      this.userId = null;
-      console.log("user id = null")
-    } else {
-      this.userId = +userId;
-      this.isMyNotes = (this.userId == +localStorage.getItem(UserData.UserId));
-      console.log(this.userId, "user id != null");
-    }
-
-    this.loadNotes(this.actualPageIndex, this.pageSize);
   }
 
 

@@ -38,17 +38,24 @@ namespace MyNotesApi.Controllers
             var currentUserMessage = dbConext.Messages.Include(u => u.FromUser).Include(u => u.ToUser).Where(m => m.FromUser.Id == userContext.GetUserContext().Id ||
                                                         m.ToUser.Id == userContext.GetUserContext().Id);
 
-            var users = await currentUserMessage.Select(u => new
+            var usersQuery = currentUserMessage.Select(u => new
             {
                 otherUser = (u.FromUser.Id == userContext.GetUserContext().Id) ? u.ToUser : u.FromUser,
                 currentUser = (u.FromUser.Id == userContext.GetUserContext().Id) ? u.FromUser : u.ToUser
-            }).Where(o =>
-                    o.currentUser.Name.ToLower().Contains(_params.SearchQuery.ToLower()) ||
-                    o.currentUser.Mail.ToLower().Contains(_params.SearchQuery.ToLower()))
-                .Select(h => h.otherUser).ToListAsync();
+            });
 
+            var users = new List<User>();
 
-            var usersCasted = mapper.Map<List<ChatUserListInstance>>(users);
+            if (!string.IsNullOrEmpty(_params.SearchQuery))
+            {
+                usersQuery = usersQuery.Where(o =>
+                         o.currentUser.Name.ToLower().Contains(_params.SearchQuery.ToLower()) ||
+                         o.currentUser.Mail.ToLower().Contains(_params.SearchQuery.ToLower()));
+            }
+
+            users = await usersQuery.Select(h => h.otherUser).ToListAsync<User>();
+
+            var usersCasted = mapper.Map<List<ChatUserListInstance>>(usersQuery);
 
             ChatUserListResponse = PagedList<ChatUserListInstance>.CreateAsync(usersCasted.AsQueryable(), _params.PageNumber, _params.PageSize);
 
@@ -61,33 +68,42 @@ namespace MyNotesApi.Controllers
         }
 
         [HttpGet("UserChatRooms/{otherUserId}")]
-        public async Task<IActionResult> GetUserChatRoom(int otherUserId, [FromQuery] ChatSearchParams _params)
+        public async Task<IActionResult> GetUserChatRoom(int otherUserId, [FromQuery] PageParams _params)
         {
             int currentUserId = userContext.GetUserContext().Id;
             var sendMessages = await dbConext.Messages.Include(u => u.FromUser).Include(u => u.ToUser)
                                                 .Where(m => m.FromUser.Id == currentUserId && m.ToUser.Id == otherUserId)
-                                                .Select(m => new MessageDto{
+                                                .Select(m => new MessageDto
+                                                {
                                                     MessageId = m.MessageId,
                                                     MessageText = m.MessageText,
                                                     SendTime = m.SendTime,
                                                     IsMyMessage = true
-                                                })
-                                                .ToListAsync();
+                                                }).ToListAsync();
 
-            var receivedMessaged = await dbConext.Messages.Include(u => u.FromUser).Include(u => u.ToUser)
+
+            var receivedMessages = await dbConext.Messages.Include(u => u.FromUser).Include(u => u.ToUser)
                                                 .Where(m => m.ToUser.Id == currentUserId && m.FromUser.Id == otherUserId)
-                                                .Select(m => new MessageDto{
+                                                .Select(m => new MessageDto
+                                                {
                                                     MessageId = m.MessageId,
                                                     MessageText = m.MessageText,
                                                     SendTime = m.SendTime,
                                                     IsMyMessage = false
-                                                })
-                                                .ToListAsync();
+                                                }).ToListAsync();
 
-            var response = sendMessages.Concat(receivedMessaged).OrderBy(m => m.SendTime);
-            return Ok(response);
+
+
+            var response = sendMessages.Concat(receivedMessages).OrderByDescending(m => m.SendTime);
+
+            var pagedReponse = PagedList<MessageDto>.CreateAsync(response.AsQueryable(), _params.PageNumber, _params.PageSize);
+
+            Response.AddPagination(pagedReponse.CurrentPage,
+                                pagedReponse.PageSize,
+                                pagedReponse.TotalCount,
+                                pagedReponse.TotalPages);
+
+            return Ok(pagedReponse);
         }
-
-
     }
 }

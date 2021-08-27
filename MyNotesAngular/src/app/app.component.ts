@@ -6,16 +6,6 @@ import { SignalRService } from './Services/SignalR.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent{
   title = 'MyNotes';
-
-  /**
-   *
-   */
-  constructor(private messageService: SignalRService) {
-    
-  }
-  ngOnInit(): void {
-    this.messageService.connectToHub();
-  }
 }

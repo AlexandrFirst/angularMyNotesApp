@@ -7,21 +7,28 @@
         </div>
     </div>
 </div>
-<div class="message-container">
-    <div class="message" *ngFor="let message of messages"
-        [ngClass]="{'my-message': message.IsMyMessage, 'other-message': !message.IsMyMessage}">
-        {{message.MessageText}}
+<div class="message-container" #messageContainer>
+    <div class="message" *ngFor="let message of messages" [class.other-message-position]="message.isMyMessage"
+        [ngStyle]="{'flex-direction':message.isMyMessage? 'row-reverse': 'row'}">
+        <div class="message-text"
+            [ngClass]="{'my-message': message.isMyMessage, 'other-message-text': !message.isMyMessage}">
+            {{message.messageText}}
+        </div>
+        <div>
+            {{message.sendTime | date: 'short'}}
+        </div>
     </div>
-    <div *ngIf="messages.length <= 0" style="display: flex; 
-                                            justify-content: center;
-                                            align-items: center;
-                                            text-align: center;
-                                            font-size: xx-large;
-                                            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+    <div *ngIf="messages.length <= 0"
+        style="display: flex; 
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                font-size: xx-large;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
         you haven't send any messages yet
     </div>
 </div>
 <div class="input-container">
-    <textarea placeholder="Enter your message" type="text"></textarea>
-    <div><i class="fa fa-paper-plane"></i></div>
+    <textarea placeholder="Enter your message" type="text" [(ngModel)]="messageText"></textarea>
+    <div (click)="sendMessage()" style="cursor: pointer;"><i class="fa fa-paper-plane"></i></div>
 </div>

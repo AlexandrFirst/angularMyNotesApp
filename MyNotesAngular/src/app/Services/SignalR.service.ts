@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as signalR from '@aspnet/signalr'
+import { Observable, Subject } from 'rxjs';
 import { UserData } from '../Models/AuthResponse';
 
 @Injectable({
@@ -19,6 +20,7 @@ export class SignalRService {
         accessTokenFactory: () => localStorage[UserData.UserToken]
       })
       .build();
+
     this.hubConnection
       .start()
       .then(() => {
@@ -27,6 +29,21 @@ export class SignalRService {
       .catch(err => {
         console.log("Error: " + err);
       })
+  }
+
+
+  getFromUserMessage() {
+    return new Observable<string>(observer => {
+      this.hubConnection.on("RecieveMessage", (message: string) => {
+        console.log("here");
+        observer.next(message);
+      })
+    })
+
+  }
+
+  sendToUserMessage(userId: number, message: string) {
+    this.hubConnection.invoke("SendMessageToUser", userId, message);
   }
 
 }

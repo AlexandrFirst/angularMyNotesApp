@@ -40,6 +40,7 @@
     grid-template-columns: 1fr;
     height: 600px;
     overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .message-container::-webkit-scrollbar-track {
@@ -58,23 +59,33 @@
 }
 
 .message {
-    font-size: x-large;
-    line-height: 1.5em;
-    width: 80%;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
     margin-top: 5px;
     margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 20px;
-    text-align: center;
+    display: flex;
+    align-items: center;
 }
 
+.message-text {
+    padding: 10px;
+    border-radius: 20px;
+    font-size: x-large;
+    line-height: 1.5em;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    text-align: center;
+    overflow-wrap: break-word;
+    margin: 5px;
+    width: fit-content;
+    max-width: 300px;
+}
 .my-message {
     background-color: cadetblue;
 }
 
-.other-message {
+
+.other-message-text {
     background-color: darkgreen;
+}
+.other-message-position {
     justify-self: end;
     margin-right: 10px;
 }
@@ -96,12 +107,11 @@
     padding: 10px;
     font-size: large;
     border-radius: 10px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
     resize: none;
-    
 }
 
-.input-container div{
+.input-container div {
     margin-right: 15px;
     text-align: center;
     font-size: x-large;

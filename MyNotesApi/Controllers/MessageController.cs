@@ -53,9 +53,9 @@ namespace MyNotesApi.Controllers
                          o.currentUser.Mail.ToLower().Contains(_params.SearchQuery.ToLower()));
             }
 
-            users = await usersQuery.Select(h => h.otherUser).ToListAsync<User>();
+            users = await usersQuery.Select(h => h.otherUser).Distinct().ToListAsync<User>();
 
-            var usersCasted = mapper.Map<List<ChatUserListInstance>>(usersQuery);
+            List<ChatUserListInstance> usersCasted = mapper.Map<List<ChatUserListInstance>>(users);
 
             ChatUserListResponse = PagedList<ChatUserListInstance>.CreateAsync(usersCasted.AsQueryable(), _params.PageNumber, _params.PageSize);
 

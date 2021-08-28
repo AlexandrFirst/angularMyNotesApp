@@ -88,6 +88,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
               var container = $container[0];
               var scrollTop = $container.scrollTop();
               var oldHeight = container.scrollHeight;
+              
               // var oldHeight = this.messageContainer.nativeElement.scrollHeight;
 
 

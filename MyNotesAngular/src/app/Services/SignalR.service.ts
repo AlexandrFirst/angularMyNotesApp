@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as signalR from '@aspnet/signalr'
 import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { UserData } from '../Models/AuthResponse';
 
 @Injectable({
@@ -14,7 +15,7 @@ export class SignalRService {
 
   connectToHub = () => {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5000/chat", {
+      .withUrl(environment.apiUrl + "chat", {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
         accessTokenFactory: () => localStorage[UserData.UserToken]

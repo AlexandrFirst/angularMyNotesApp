@@ -4,7 +4,7 @@
         <div class="user-status user-status-inactive"></div>
     </div>
     <div class="actions">
-        <div class="send-btn"><i class="fa fa-paper-plane"></i></div>
+        <div class="send-btn"><a [routerLink]="['../userchats', item.id.toString()]"><i class="fa fa-paper-plane"></i></a></div>
         <div class="delete-btn"><i class="fa fa-trash"></i></div>
     </div>
 </div>

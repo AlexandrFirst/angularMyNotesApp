@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyNotesApi.DataContext;
@@ -10,35 +9,33 @@ using MyNotesApi.DataContext;
 namespace MyNotesApi.Migrations
 {
     [DbContext(typeof(MyDataContext))]
-    [Migration("20210819163450_MainPhotoUserUrlFieldAdded")]
-    partial class MainPhotoUserUrlFieldAdded
+    [Migration("20210830103057_MySqlProviderChanged")]
+    partial class MySqlProviderChanged
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.8")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.9");
 
             modelBuilder.Entity("MyNotesApi.DataContext.Image", b =>
                 {
                     b.Property<int>("ImageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsTitleImage")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
 
                     b.Property<string>("PublicKey")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("ImageId");
 
@@ -51,11 +48,10 @@ namespace MyNotesApi.Migrations
                 {
                     b.Property<int>("LikeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("LikeDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
@@ -72,21 +68,47 @@ namespace MyNotesApi.Migrations
                     b.ToTable("Likes");
                 });
 
+            modelBuilder.Entity("MyNotesApi.DataContext.Message", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FromUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MessageText")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("SendTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("ToUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>
                 {
                     b.Property<int>("NoteId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int?>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("NoteId");
 
@@ -99,14 +121,13 @@ namespace MyNotesApi.Migrations
                 {
                     b.Property<int>("RepostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RepostDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -124,31 +145,44 @@ namespace MyNotesApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Mail")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("MainPhotoUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Mail")
-                        .IsUnique()
-                        .HasFilter("[Mail] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.Property<int>("FollowersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubscribersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FollowersId", "SubscribersId");
+
+                    b.HasIndex("SubscribersId");
+
+                    b.ToTable("UserUser");
                 });
 
             modelBuilder.Entity("MyNotesApi.DataContext.Image", b =>
@@ -176,6 +210,21 @@ namespace MyNotesApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MyNotesApi.DataContext.Message", b =>
+                {
+                    b.HasOne("MyNotesApi.DataContext.User", "FromUser")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("FromUserId");
+
+                    b.HasOne("MyNotesApi.DataContext.User", "ToUser")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("ToUserId");
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>
                 {
                     b.HasOne("MyNotesApi.DataContext.User", "Author")
@@ -200,6 +249,21 @@ namespace MyNotesApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.HasOne("MyNotesApi.DataContext.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyNotesApi.DataContext.User", null)
+                        .WithMany()
+                        .HasForeignKey("SubscribersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>
                 {
                     b.Navigation("Likes");
@@ -215,7 +279,11 @@ namespace MyNotesApi.Migrations
 
                     b.Navigation("Notes");
 
+                    b.Navigation("ReceivedMessages");
+
                     b.Navigation("Reposts");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

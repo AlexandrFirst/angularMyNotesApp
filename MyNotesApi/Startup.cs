@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using MyNotesApi.Helpers.ExceptionHandler;
 using Microsoft.Extensions.Options;
 using MyNotesApi.HubConfig;
+using System;
 
 namespace MyNotesApi
 {
@@ -28,7 +29,10 @@ namespace MyNotesApi
             #region Example of how to create DbContextOptions manually
 
             var optionsBuilder = new DbContextOptionsBuilder<MyDataContext>();
-            optionsBuilder.UseSqlServer(Configuration["ConnectionString:NoteDB"]);
+            //optionsBuilder.UseSqlServer(Configuration["ConnectionString:NoteDB"]);
+            optionsBuilder.UseMySql
+           (Configuration["ConnectionString:NoteDB"],
+             new MySqlServerVersion(new Version(8, 0, 26)));
 
             #endregion
 
@@ -86,7 +90,11 @@ namespace MyNotesApi
             services.Configure<DatabaseSettings>(Configuration.GetSection("ConnectionString"));
             services.Configure<CloudinaryHelper>(Configuration.GetSection("CloudinarySettings"));
 
-            services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
+            // services.AddDbContext<MyDataContext>(opt => opt.UseSqlServer(Configuration["ConnectionString:NoteDB"]));
+
+            services.AddDbContext<MyDataContext>(opt => opt.UseMySql
+           (Configuration["ConnectionString:NoteDB"],
+             new MySqlServerVersion(new Version(8, 0, 26))));
             //services.AddDbContext<MyDataContext>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddScoped<IAuthService, AuthService>();
@@ -133,8 +141,8 @@ namespace MyNotesApi
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
 
-             app.UseDefaultFiles();
-             app.UseStaticFiles();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

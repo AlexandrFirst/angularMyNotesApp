@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MyNotesApi.DataContext.ModelConfiguration;
@@ -16,7 +17,15 @@ namespace MyNotesApi.DataContext
 
         public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
         {
-            Database.Migrate();
+            try
+            {
+                Database.Migrate();
+            }
+            catch(Exception ex)
+            {
+                
+            }
+            
             this.ChangeTracker.LazyLoadingEnabled = false;
         }
         private readonly DatabaseSettings dbSettings;

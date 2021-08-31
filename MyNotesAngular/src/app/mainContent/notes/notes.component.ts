@@ -7,7 +7,7 @@ import { NoteService } from 'src/app/Services/note.service';
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.scss']
+  styleUrls: ['./notes.component.scss', './notes.component.adobt.scss']
 })
 export class NotesComponent implements OnInit {
 

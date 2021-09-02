@@ -15,6 +15,8 @@ using MyNotesApi.Helpers.ExceptionHandler;
 using Microsoft.Extensions.Options;
 using MyNotesApi.HubConfig;
 using System;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace MyNotesApi
 {
@@ -107,6 +109,10 @@ namespace MyNotesApi
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
+            services.Configure<ForwardedHeadersOptions>(options => {
+                options.KnownProxies.Add(IPAddress.Parse("192.168.1.107"));
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,6 +133,11 @@ namespace MyNotesApi
 
             app.UseRouting();
             //app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions{
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
 
             app.UseMiddleware<JwtMiddleware>();
 

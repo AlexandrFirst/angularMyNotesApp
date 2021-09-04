@@ -22,8 +22,8 @@ import { LoginGuard } from './route-guard/login.guard';
 import { AddHeaderInterceptor } from './Interceptors/addHeadersInterceptor';
 import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerInterceptor';
 import { QuillModule } from 'ngx-quill';
-import { ChatRoomComponent } from './mainContent/chat-room/chat-room.component';
 import { VideochatComponent } from './mainContent/videochat/videochat.component';
+import { CallCardComponent } from './mainContent/call-card/call-card.component';
 
 
 @NgModule({
@@ -34,7 +34,8 @@ import { VideochatComponent } from './mainContent/videochat/videochat.component'
     NavBarComponent,
     MainContentViewComponent,
     LoadingSignComponent,
-    VideochatComponent
+    VideochatComponent,
+    CallCardComponent
   ],
   imports: [
     BrowserModule,

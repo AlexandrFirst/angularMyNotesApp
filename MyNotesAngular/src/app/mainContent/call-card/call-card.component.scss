@@ -1,0 +1,69 @@
+.card-container {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 300px;
+    height: 450px;
+    background-color: #46d2ee;
+    box-shadow: 5px 5px 10px #040605;
+    border-radius: 10px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.card-img {
+    border-radius: 50%;
+    width: 200px;
+}
+
+.card-name {
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: x-large;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    text-align: center;
+}
+
+.control-panel {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.accept-btn {
+    height: 60px;
+    width: 60px;
+    background-color: rgb(12, 211, 12);
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.decline-btn {
+    height: 60px;
+    width: 60px;
+    transform: rotate(140deg);
+    background-color: rgb(211, 12, 12);
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}

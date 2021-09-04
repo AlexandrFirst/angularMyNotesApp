@@ -23,6 +23,7 @@ import { AddHeaderInterceptor } from './Interceptors/addHeadersInterceptor';
 import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerInterceptor';
 import { QuillModule } from 'ngx-quill';
 import { ChatRoomComponent } from './mainContent/chat-room/chat-room.component';
+import { VideochatComponent } from './mainContent/videochat/videochat.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ChatRoomComponent } from './mainContent/chat-room/chat-room.component';
     HeaderComponent,
     NavBarComponent,
     MainContentViewComponent,
-    LoadingSignComponent
+    LoadingSignComponent,
+    VideochatComponent
   ],
   imports: [
     BrowserModule,

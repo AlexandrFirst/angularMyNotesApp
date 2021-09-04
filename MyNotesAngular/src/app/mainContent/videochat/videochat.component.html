@@ -1,4 +1,4 @@
-<div id="Dish">
+<div id="Dish" [style.right]="isVideoChatActive? '400px': '0px'">
   <div class="Camera"></div>
   <div class="Camera"></div>
   <div class="Camera"></div>
@@ -6,11 +6,16 @@
   <div class="Camera"></div>
   <div class="control-panel">
     <div class="control-btn stop-call"><i class="fa fa-phone" aria-hidden="true"></i></div>
-    <div class="control-btn"><i class="fa fa-microphone" aria-hidden="true"></i></div>
-    <div class="control-btn chat-active"><i class="fa fa-comments" aria-hidden="true"></i></div>
+    <div class="control-btn" (click)="isAudio = !isAudio"><i
+        [ngClass]="isAudio? 'fa fa-microphone':'fa fa-microphone-slash'" aria-hidden="true"></i></div>
+    <div class="control-btn" (click)="isVideoOn = !isVideoOn" [class.stop-call]="!isVideoOn"><i class="fa fa-video-camera" aria-hidden="true"></i>
+    </div>
+    <div class="control-btn" [class.chat-active]="isVideoChatActive" (click)="ToggleVideoChat()"><i
+        class="fa fa-comments" aria-hidden="true"></i>
+    </div>
   </div>
 </div>
-<div class="chat-area">
+<div class="chat-area" [style.right]="isVideoChatActive? '0px': '-400px'">
   <div class="message-container">
     <div class="message my-message">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae fuga dignissimos quos beatae quidem

@@ -12,8 +12,10 @@
     top: 0px;
     right: 400px;
     z-index: 1;
-   background-color: rgba(0, 0, 0, 0.685);
+    background-color: rgba(0, 0, 0, 0.685);
+    transition: all 0.1s linear;
 }
+
 /* Camera */
 #Dish .Camera {
     position: relative;

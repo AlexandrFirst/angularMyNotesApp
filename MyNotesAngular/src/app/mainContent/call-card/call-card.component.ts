@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CallCardComponent implements OnInit {
 
+  isInputCall = false;
+
   constructor() { }
 
   ngOnInit() {

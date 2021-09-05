@@ -15,9 +15,16 @@ namespace MyNotesApi.DataContext.ModelConfiguration
 
             builder.HasMany(u => u.Reposts)
                    .WithOne(r => r.User);
-            
+
             builder.HasIndex(u => u.Mail)
                    .IsUnique();
+
+
+            builder.HasMany(u => u.SentMessages)
+                   .WithOne(m => m.ToUser);
+
+            builder.HasMany(u => u.ReceivedMessages)
+                    .WithOne(m => m.FromUser);
         }
     }
 }

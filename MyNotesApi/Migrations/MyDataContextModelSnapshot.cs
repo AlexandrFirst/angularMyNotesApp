@@ -70,6 +70,34 @@ namespace MyNotesApi.Migrations
                     b.ToTable("Likes");
                 });
 
+            modelBuilder.Entity("MyNotesApi.DataContext.Message", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("FromUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MessageText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ToUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>
                 {
                     b.Property<int>("NoteId")
@@ -128,6 +156,9 @@ namespace MyNotesApi.Migrations
                     b.Property<string>("Mail")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("MainPhotoUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -144,6 +175,21 @@ namespace MyNotesApi.Migrations
                         .HasFilter("[Mail] IS NOT NULL");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.Property<int>("FollowersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubscribersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FollowersId", "SubscribersId");
+
+                    b.HasIndex("SubscribersId");
+
+                    b.ToTable("UserUser");
                 });
 
             modelBuilder.Entity("MyNotesApi.DataContext.Image", b =>
@@ -171,6 +217,21 @@ namespace MyNotesApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MyNotesApi.DataContext.Message", b =>
+                {
+                    b.HasOne("MyNotesApi.DataContext.User", "FromUser")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("FromUserId");
+
+                    b.HasOne("MyNotesApi.DataContext.User", "ToUser")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("ToUserId");
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>
                 {
                     b.HasOne("MyNotesApi.DataContext.User", "Author")
@@ -195,6 +256,21 @@ namespace MyNotesApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.HasOne("MyNotesApi.DataContext.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyNotesApi.DataContext.User", null)
+                        .WithMany()
+                        .HasForeignKey("SubscribersId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MyNotesApi.DataContext.Note", b =>
                 {
                     b.Navigation("Likes");
@@ -210,7 +286,11 @@ namespace MyNotesApi.Migrations
 
                     b.Navigation("Notes");
 
+                    b.Navigation("ReceivedMessages");
+
                     b.Navigation("Reposts");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

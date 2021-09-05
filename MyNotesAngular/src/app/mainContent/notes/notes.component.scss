@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+
 .content {
     width: 600px;
     height: fit-content;
@@ -14,7 +16,6 @@
     margin-bottom: 10px;
     // background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(142, 234, 252, 1) 0%, rgba(255, 255, 255, 1) 60%);
 }
-
 
 .card > img {
     display: block;
@@ -83,3 +84,67 @@
     color: rgb(51, 118, 122);
 }
 
+.pagination-container {
+    margin-top: 100px;
+    background: #dde1e7;
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288);
+    width: 100%;
+}
+
+.pagination {
+    list-style: none;
+    display: flex;
+}
+
+.pagination li {
+    flex: 1;
+    margin: 0px 5px;
+    background: #dde1e7;
+    border-radius: 3px;
+    box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288);
+    align-self: center;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination li:nth-child(4){
+    box-shadow: none;
+    font-size: 30px;
+}
+
+.pagination li a {
+    font-size: 18px;
+    text-decoration: none;
+    color: #4d3252;
+    height: 45px;
+    width: 55px;
+    display: block;
+    line-height: 45px;
+    text-align: center;
+  }
+
+  .pagination li:first-child a {
+    width: 120px;
+  }
+
+  .pagination li:last-child a {
+    width: 100px;
+  }
+
+  .pagination li.active {
+    box-shadow: inset -3px -3px 7px #ffffff73,
+      inset 3px 3px 5px rgba(94, 104, 121, 0.288);
+  }
+
+  .pagination li.active a {
+    font-size: 17px;
+    color: #6f6cde;
+  }
+  .pagination li:first-child {
+    margin: 0 15px 0 0;
+  }
+  .pagination li:last-child {
+    margin: 0 0 0 15px;
+  }

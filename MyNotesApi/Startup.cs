@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
@@ -11,11 +10,10 @@ using MyNotesApi.DataContext;
 using MyNotesApi.ServiceProtos;
 using MyNotesApi.Services;
 using MyNotesApi.Helpers;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-
 using Microsoft.EntityFrameworkCore;
 using MyNotesApi.Helpers.ExceptionHandler;
 using Microsoft.Extensions.Options;
+using MyNotesApi.HubConfig;
 
 namespace MyNotesApi
 {
@@ -66,9 +64,21 @@ namespace MyNotesApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AnyHeadersAllowed", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
             services.AddControllers();
 
@@ -82,6 +92,7 @@ namespace MyNotesApi
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             services.AddControllers().AddNewtonsoftJson(o =>
             {
@@ -102,22 +113,28 @@ namespace MyNotesApi
 
             app.ConfigureCustomExceptionMiddleware();
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            //app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AnyHeadersAllowed");
 
 
             app.UseRouting();
+            //app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseMiddleware<JwtMiddleware>();
 
-
-            // app.UseAuthentication();
+            //app.UseAuthentication();
             // app.UseAuthorization();
 
+            app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MyHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
+
+             app.UseDefaultFiles();
+             app.UseStaticFiles();
         }
     }
 }

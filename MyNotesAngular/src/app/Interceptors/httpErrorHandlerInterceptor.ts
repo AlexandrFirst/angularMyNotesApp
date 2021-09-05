@@ -20,6 +20,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
 
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
+                console.log(error.error.Message)
                 this.notificationService.sendMessage({
                     message: error.error.Message,
                     type: NotificationType.error

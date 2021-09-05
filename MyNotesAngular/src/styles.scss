@@ -7,6 +7,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,300;1,400&display=swap");
 
 
+:root {
+    --rad: 0.7rem;
+    --dur: 0.3s;
+    --color-dark: #2f2f2f;
+    --color-light: #fff;
+    --color-brand: #18c6ea;
+    --font-fam: "Lato", sans-serif;
+    --height: 2rem;
+    --btn-width: 3rem;
+    --bez: cubic-bezier(0, 0, 0.43, 1.49);
+}
+
 html,
 body {
     height: 100%;
@@ -16,4 +28,17 @@ body {
     background-color: rgb(255, 255, 255) !important;
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-paginator-container {
+    justify-content: center !important;
 }

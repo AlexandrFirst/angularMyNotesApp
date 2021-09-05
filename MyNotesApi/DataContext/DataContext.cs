@@ -12,9 +12,11 @@ namespace MyNotesApi.DataContext
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Repost> Reposts { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
 
         public MyDataContext(DbContextOptions<MyDataContext> options) : base(options)
         {
+            Database.Migrate();
             this.ChangeTracker.LazyLoadingEnabled = false;
         }
         private readonly DatabaseSettings dbSettings;

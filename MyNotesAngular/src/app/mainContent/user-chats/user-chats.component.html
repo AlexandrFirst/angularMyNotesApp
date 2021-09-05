@@ -1,1 +1,22 @@
-user-chats works!
+<div class="card" *ngFor="let item of chatRooms">
+    <div class="user-name">
+        {{item.name}}
+        <div class="user-status user-status-inactive"></div>
+    </div>
+    <div class="actions">
+        <div class="send-btn"><a [routerLink]="['../userchats', item.id.toString()]"><i class="fa fa-paper-plane"></i></a></div>
+        <div class="delete-btn"><i class="fa fa-trash"></i></div>
+    </div>
+</div>
+<div *ngIf="chatRooms.length <= 0">
+    <div style="height: 600px; display: flex; justify-content: center;">
+        <div style="align-self: center;
+                    font-size: 3em;
+                    line-height: 1.2em;
+                    font-family: 'Fredoka One', sans-serif;
+                    color: rgb(100, 100, 100);
+                    text-align: center;">
+            You haven't started any conversations yet
+        </div>
+    </div>
+</div>

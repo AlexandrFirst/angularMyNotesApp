@@ -3,8 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-
-
 import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -23,7 +21,9 @@ import { MainContentGuard } from './route-guard/main-content.guard';
 import { LoginGuard } from './route-guard/login.guard';
 import { AddHeaderInterceptor } from './Interceptors/addHeadersInterceptor';
 import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerInterceptor';
-import { QuillModule } from 'ngx-quill'
+import { QuillModule } from 'ngx-quill';
+import { VideochatComponent } from './mainContent/videochat/videochat.component';
+import { CallCardComponent } from './mainContent/call-card/call-card.component';
 
 
 @NgModule({
@@ -33,7 +33,9 @@ import { QuillModule } from 'ngx-quill'
     HeaderComponent,
     NavBarComponent,
     MainContentViewComponent,
-    LoadingSignComponent
+    LoadingSignComponent,
+    VideochatComponent,
+    CallCardComponent
   ],
   imports: [
     BrowserModule,

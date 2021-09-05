@@ -1,13 +1,15 @@
+<mat-paginator [pageIndex] = "pageIndex" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOption" (page)="pageEvent($event)" aria-label="Select page">
+</mat-paginator>
 <div *ngIf="notes.length > 0; else no_notes_count">
     <div class="card" *ngFor="let item of notes">
         <img src={{item.titleImage.imageUrl}} />
-        <div class="main-content" [innerHTML] = "item.content">
+        <div class="main-content" [innerHTML]="item.content">
         </div>
         <div class="footer">
             <div class="actions">
                 <span class="fa fa-heart-o"><span>{{item.likes.length}}</span></span>
                 <span class="fa fa-share-square"><span>{{item.reposts.length}}</span></span>
-                <a (click)="editBtnClick(item.noteId)"><span class="fa fa-edit"></span></a>
+                <a *ngIf="isMyNotes" (click)="editBtnClick(item.noteId)" style="cursor: pointer;"><span class="fa fa-edit"></span></a>
             </div>
             <div class="author">
                 By {{item.author.name}}
@@ -17,7 +19,7 @@
 </div>
 <ng-template #no_notes_count>
     <div style="height: 600px; display: flex; justify-content: center;">
-        <div style="align-self: center;
+        <div *ngIf="isMyNotes; else no_notes_count_other_user" style="align-self: center;
                     font-size: 3em;
                     font-family: 'Fredoka One', sans-serif;
                     color: rgb(100, 100, 100);">
@@ -25,6 +27,19 @@
         </div>
     </div>
 </ng-template>
-<div class="add-button">
+<ng-template #no_notes_count_other_user>
+    <div style="height: 600px; display: flex; justify-content: center;">
+        <div *ngIf="isMyNotes; else " style="align-self: center;
+                    font-size: 3em;
+                    line-height: 1.2em;
+                    font-family: 'Fredoka One', sans-serif;
+                    color: rgb(100, 100, 100);">
+            This user hasn't added any notes yet
+        </div>
+    </div>
+</ng-template>
+<div *ngIf="isMyNotes;" class="add-button">
     <a routerLink="../add" class="fa fa-plus"></a>
 </div>
+<mat-paginator [pageIndex] = "pageIndex" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOption" (page)="pageEvent($event)" aria-label="Select page">
+</mat-paginator>

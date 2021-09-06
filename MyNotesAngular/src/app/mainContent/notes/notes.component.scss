@@ -39,6 +39,7 @@
     line-height: 1.3em;
     text-indent: 50px;
     text-align: justify;
+    word-break: break-all;
 }
 
 .footer {
@@ -66,10 +67,10 @@
 }
 
 .add-button {
-    bottom: 10%;
-    right: 10%;
-    font-size: 80px;
-    position: fixed;
+    // bottom: 10%;
+    // right: 10%;
+    // font-size: 80px;
+    // position: fixed;
 }
 
 .add-button > a {
@@ -148,3 +149,26 @@
   .pagination li:last-child {
     margin: 0 0 0 15px;
   }
+
+
+.tools-container {
+    position: fixed;
+    display: flex;
+    bottom: 10%;
+    right: 20%;
+    height: 40px;
+    width: 70px;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    background-color:lavender;
+    border-radius: 50px;
+    font-size: 60px;
+    padding: 10px;
+    overflow: hidden;
+    transition: .4s all;
+
+    &:hover {
+        height: 220px;
+    }
+}

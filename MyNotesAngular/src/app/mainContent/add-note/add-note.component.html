@@ -2,8 +2,9 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <app-file-upload formControlName="titleImage" requiredFileType="image/jpeg"></app-file-upload>
         <!-- <angular-editor formControlName="htmlContent" [config]="editorConfig"></angular-editor> -->
-        
-        <quill-editor formControlName="htmlContent" [modules]="modules"></quill-editor>
+        <div class="quill-container">
+            <quill-editor formControlName="htmlContent" [modules]="modules"></quill-editor>
+        </div>
         <div class="btn-container">
             <button type="button" (click)="deleteNote()" style="background-color: orange;" *ngIf="isEditingMode">
                 Delete note

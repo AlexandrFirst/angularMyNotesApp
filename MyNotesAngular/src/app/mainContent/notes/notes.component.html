@@ -38,8 +38,16 @@
         </div>
     </div>
 </ng-template>
-<div *ngIf="isMyNotes;" class="add-button">
-    <a routerLink="../add" class="fa fa-plus"></a>
+<div class="tools-container">
+    <div *ngIf="isMyNotes;" class="add-button">
+        <a routerLink="../add" class="fa fa-plus"></a>
+    </div>
+    <div *ngIf="isMyNotes;" class="add-button">
+        <a routerLink="../add" class="fa fa-comments"></a>
+    </div>
+    <div *ngIf="isMyNotes;" class="add-button">
+        <a routerLink="../add" class="fa fa-user-plus"></a>
+    </div>
 </div>
 <mat-paginator [pageIndex] = "pageIndex" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOption" (page)="pageEvent($event)" aria-label="Select page">
 </mat-paginator>

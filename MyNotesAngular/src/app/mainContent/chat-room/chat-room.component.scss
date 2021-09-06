@@ -41,6 +41,7 @@
     height: 600px;
     overflow-y: scroll;
     scroll-behavior: smooth;
+    align-content: flex-start;
 }
 
 .message-container::-webkit-scrollbar-track {

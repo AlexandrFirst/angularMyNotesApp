@@ -24,6 +24,7 @@ import { ServerErrorInterceptor } from './Interceptors/httpErrorHandlerIntercept
 import { QuillModule } from 'ngx-quill';
 import { VideochatComponent } from './mainContent/videochat/videochat.component';
 import { CallCardComponent } from './mainContent/call-card/call-card.component';
+import { VideoCallComponent } from './mainContent/video-call/video-call.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { CallCardComponent } from './mainContent/call-card/call-card.component';
     MainContentViewComponent,
     LoadingSignComponent,
     VideochatComponent,
-    CallCardComponent
+    CallCardComponent,
+    VideoCallComponent
   ],
   imports: [
     BrowserModule,

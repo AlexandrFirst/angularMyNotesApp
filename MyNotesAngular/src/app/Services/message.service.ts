@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 import { Subject } from 'rxjs';
 import { MessageDto } from '../Models/MessageDto';
 import { ExecutePaginatedQuery } from '../Models/Pagination';
+import { ISignalRMessageService } from './Abstartions/ISignalRMessageService';
 import { HttpService } from './http.service';
-import { SignalRService } from './SignalR.service';
+import { SignalRProvider } from './Providers/SignalRProvider';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
 
@@ -18,24 +19,26 @@ export class MessageService {
 
   constructor(private http: HttpService,
     private client: HttpClient,
-    private signalRService: SignalRService) {
-  }
+    @Inject(SignalRProvider)
+    private signalRService: ISignalRMessageService) {
 
-  initialize() {
-    this.signalRService.connectToHub();
-    this.signalRService.getFromUserMessage().subscribe(message => {
-      this.otherMessageStream.next(message);
-    })
+    if (!signalRService.IsConnected) {
+      signalRService.connectToHub();
+      signalRService.getFromUserMessage().subscribe(message => {
+        this.otherMessageStream.next(message);
+      })
+    }
+
   }
 
   sendMessage(userId: number, message: string) {
     this.signalRService.sendToUserMessage(userId, message);
   }
 
-  getMessageStream(){
+  getMessageStream() {
     return this.otherMessageStream.asObservable();
   }
-  
+
   getAllMessages(otherUderId, page?, pageSize?) {
     return ExecutePaginatedQuery<MessageDto>(this.client,
       this.http.baseUrl + "Message/UserChatRooms/" + otherUderId,

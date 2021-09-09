@@ -32,6 +32,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
     this.messageService.initialize();
     // console.log(this.messageContainer.nativeElement);
     this.messageService.getMessageStream().subscribe(message => {

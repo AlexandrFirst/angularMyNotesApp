@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { NotificationType } from 'src/app/Models/NotificationMessage';
-import { RTCMessage } from 'src/app/Models/RTCMessage';
+import { RTCMessage, UserCallState } from 'src/app/Models/RTCMessage';
+import { videoChatData } from 'src/app/Models/videoChatData';
+import { AccessResponseMessage } from 'src/app/Services/Abstartions/ISignalRWEBRtcService';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { VideoCallService } from 'src/app/Services/video-call.service';
 
@@ -11,19 +14,20 @@ import { VideoCallService } from 'src/app/Services/video-call.service';
 })
 export class VideoCallComponent implements OnInit {
 
-  
-  public isConnectionEstablihed: boolean = false;
-  
+  public UserState: UserCallState = UserCallState.Idle;
+
   private RTCConnections: RTCPeerConnection[] = [];
-  
+
   private RemoteVideoStreams: MediaStream[] = [];
   private RemoteAudioStreams: MediaStream[] = [];
-  
+
   private audioRtpSenders: RTCRtpSender[] = [];
   private videoRtpSenders: RTCRtpSender[] = [];
 
   private myAudioTrack;
-  public myVideoTrack;
+  private myVideoTrack;
+
+  public videoChatData: videoChatData;
 
   private iceConfig = {
     iceServers: [{
@@ -45,6 +49,7 @@ export class VideoCallComponent implements OnInit {
   ngOnInit() {
 
     this.videoService.getOffer().subscribe(async (offer: RTCMessage) => {
+
       offer = JSON.parse(offer.data);
 
       if (!this.RTCConnections[offer.fromUserId]) {
@@ -57,8 +62,6 @@ export class VideoCallComponent implements OnInit {
 
       this.videoService.sendAnswer(offer.fromUserId, JSON.stringify(answer));
     })
-
-
 
     this.videoService.getAnswer().subscribe(async (answer: RTCMessage) => {
       await this.RTCConnections[answer.fromUserId].setRemoteDescription(new RTCSessionDescription(answer.data));
@@ -77,11 +80,49 @@ export class VideoCallComponent implements OnInit {
       }
     })
 
+    this.videoService.canAccessUserReponse().subscribe((fromUserId: number) => {
+      if (this.UserState == UserCallState.BeingCalled || UserCallState.Calling) {
+        this.videoService.sendAccessReponse(fromUserId, false);
+      }
+      else {
+        this.videoService.askUserToAccept().subscribe(data => {
+          this.videoService.sendAccessReponse(fromUserId, data);
+        })
+
+      }
+    })
+
+    this.videoService.listenToDeclineCall().subscribe(() => {
+      this.UserState = UserCallState.Idle;
+    })
+
   }
 
-  callInit(userId){
-    this.processMedia();
-    this.createConnection(userId);
+  callInit(userId) {
+
+    if (this.UserState == UserCallState.Idle) {
+      this.UserState = UserCallState.Calling
+
+      this.processMedia();
+      this.createConnection(userId);
+
+      this.videoService.canAccessUserRequest(userId).subscribe((accessResponseMesage: AccessResponseMessage) => {
+        if (!accessResponseMesage.canAccess) {
+          this.UserState = UserCallState.Idle;
+          return;
+        }
+        else {
+          this.createConnection(userId);
+        }
+      })
+
+      this.videoService.askUserToAccept().subscribe(data => {
+        this.UserState = UserCallState.Idle
+
+        this.videoService.declineCall(userId);
+      })
+
+    }
 
   }
 
@@ -118,6 +159,14 @@ export class VideoCallComponent implements OnInit {
       }
 
       this.updateMediaSenders(this.myVideoTrack, this.videoRtpSenders);
+    }
+
+    webRTCConnection.onconnectionstatechange = (event) => {
+      switch (webRTCConnection.connectionState) {
+        case "connected":
+          this.UserState == UserCallState.Idle
+          break;
+      }
     }
 
     return webRTCConnection;
@@ -166,17 +215,25 @@ export class VideoCallComponent implements OnInit {
   }
 
   updateMediaSenders(track, rtpSenders) {
-    for (var con_id in this.RTCConnections) {
-      var connections = this.RTCConnections[con_id];
+    for (var userId in this.RTCConnections) {
+      var connections = this.RTCConnections[userId];
       if (connections && (connections.connectionState == "new" ||
         connections.connectionState == "connecting" ||
         connections.connectionState == "connected")) {
-        if (rtpSenders[con_id] && rtpSenders[con_id].track) {
-          rtpSenders[con_id].replaceTrack(track);
+        if (rtpSenders[userId] && rtpSenders[userId].track) {
+          rtpSenders[userId].replaceTrack(track);
         } else {
-          rtpSenders[con_id] = this.RTCConnections[con_id].addTrack(track);
+          rtpSenders[userId] = this.RTCConnections[userId].addTrack(track);
         }
       }
+    }
+
+    this.videoChatData = {
+      RemoteAudioStreams : this.RemoteAudioStreams,
+      RemoteVideoStreams: this.RemoteVideoStreams,
+      connectionCount: this.RTCConnections,
+      myAudioTrack: this.myAudioTrack,
+      myVideoTrack: this.myVideoTrack
     }
   }
 }

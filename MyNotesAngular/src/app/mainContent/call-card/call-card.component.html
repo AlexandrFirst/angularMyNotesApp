@@ -11,10 +11,10 @@
       Alex
     </div>
     <div class="control-panel">
-      <div class="accept-btn" *ngIf="isInputCall">
+      <div (click)="acceptCall()" class="accept-btn" *ngIf="isInputCall">
         <i class="fa fa-phone" aria-hidden="true"></i>
       </div>
-      <div class="decline-btn">
+      <div (click)="declineCall()" class="decline-btn">
         <i class="fa fa-phone" aria-hidden="true"></i>
       </div>
     </div>

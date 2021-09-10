@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserData } from '../Models/AuthResponse';
 import { ISignalRMessageService } from './Abstartions/ISignalRMessageService';
-import { ISignalRWEBRtcService } from './Abstartions/ISignalRWEBRtcService';
+import { AccessResponseMessage, ISignalRWEBRtcService } from './Abstartions/ISignalRWEBRtcService';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +15,7 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
   private isConnected: boolean = false;
 
   constructor() { }
-  
-  
- 
+
 
   IsConnected(): boolean {
     return this.isConnected;
@@ -72,7 +70,7 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
     })
   }
 
-  sendOffer(userId: number, offerData: string) {
+  sendSdpOffer(userId: number, offerData: string) {
     this.hubConnection.invoke("sendOffer", userId, offerData);
   }
 
@@ -85,9 +83,10 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
     })
   }
 
-  sendAnswer(userId: number, answer: string) {
+  sendSdpAnswer(userId: number, answer: string) {
     this.hubConnection.invoke("sendAnswer", userId, answer);
   }
+
   receiveAnswer(): Observable<string> {
     return new Observable(observer => {
       this.hubConnection.on("receiveAnswer", (answer: string) => {
@@ -96,4 +95,39 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
       });
     })
   }
+
+  sendAccessRequest(toUserId: number) {
+    this.hubConnection.invoke("accessRequest", toUserId);
+  }
+
+  receiveAccessRequest(): Observable<number> {
+    return new Observable(observer => {
+      this.hubConnection.on("reciveAccessRequest", (fromUserId: number) => {
+        observer.next(fromUserId)
+      })
+    })
+  }
+  
+  sendAccessResponse(toUserId: number, canAccess: boolean) {
+    this.hubConnection.invoke("accessResponse", toUserId, canAccess);
+  }
+  receiveAccessResponse(): Observable<AccessResponseMessage> {
+    return new Observable(observer => {
+      this.hubConnection.on("reciveAccessResponse", (response: AccessResponseMessage) => {
+        observer.next(response)
+      })
+    })
+  }
+
+  declineCall(userId: any) {
+    this.hubConnection.invoke("declineCall", userId);
+  }
+  recieveDeclineCall(): Observable<void> {
+    return new Observable(observer => {
+      this.hubConnection.on("declineCallRecieve", () => {
+        observer.next()
+      })
+    })
+  }
+
 }

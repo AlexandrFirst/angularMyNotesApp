@@ -35,5 +35,36 @@ namespace MyNotesApi.HubConfig
             await Clients.Group(userId.ToString()).SendAsync("RecieveMessage", message);
             await messageService.SendMessage(userId, message);
         }
+
+        public async Task sendICECandiate(int userId, string iceCandidateData)
+        {
+            await Clients.Group(userId.ToString()).SendAsync("receiveICECandidate", iceCandidateData);
+        }
+
+        public async Task sendOffer(int userId, string offerData)
+        {
+            await Clients.Group(userId.ToString()).SendAsync("receiveOffer", offerData);
+        }
+
+        public async Task sendAnswer(int userId, string answer)
+        {
+            await Clients.Group(userId.ToString()).SendAsync("receiveAnswer", answer);
+        }
+
+        public async Task accessRequest(int toUserId)
+        {
+            await Clients.Group(toUserId.ToString()).SendAsync("reciveAccessRequest", toUserId);
+        }
+
+        public async Task accessResponse(int toUserId, bool canAccess)
+        {
+            await Clients.Group(toUserId.ToString()).SendAsync("reciveAccessResponse", new { fromUserId = toUserId, canAccess = canAccess });
+        }
+
+        public async Task declineCall(int userId)
+        {
+            await Clients.Group(userId.ToString()).SendAsync("declineCallRecieve");
+        }
+
     }
 }

@@ -22,12 +22,10 @@ export class MessageService {
     @Inject(SignalRProvider)
     private signalRService: ISignalRMessageService) {
 
-    if (!signalRService.IsConnected) {
-      signalRService.connectToHub();
-      signalRService.getFromUserMessage().subscribe(message => {
-        this.otherMessageStream.next(message);
-      })
-    }
+    signalRService.getFromUserMessage().subscribe(message => {
+      this.otherMessageStream.next(message);
+    })
+
 
   }
 

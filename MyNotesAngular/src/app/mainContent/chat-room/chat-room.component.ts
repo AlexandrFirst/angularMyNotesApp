@@ -7,6 +7,7 @@ import * as $ from 'jquery';
 import { Browser } from 'protractor';
 import { Platform } from '@angular/cdk/platform';
 import { getBrowserName } from 'src/app/Models/helpers';
+import { VideoCallService } from 'src/app/Services/video-call.service';
 
 
 @Component({
@@ -29,12 +30,10 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
   @ViewChild("messageContainer") private messageContainer: ElementRef;
 
   constructor(private messageService: MessageService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private videoService: VideoCallService) { }
 
   ngOnInit(): void {
-
-    this.messageService.initialize();
-    // console.log(this.messageContainer.nativeElement);
     this.messageService.getMessageStream().subscribe(message => {
       this.messages.push(
         {
@@ -76,31 +75,18 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.messageContainer.nativeElement.addEventListener('scroll', () => {
         if (this.messageContainer.nativeElement.scrollTop - 100 <= 0) {
-          console.log("Scrolled to top");
 
           if (this.pageIndex <= this.totalPages) {
             this.messageService.getAllMessages(this.otherUserId, this.pageIndex, this.pageSize).subscribe((result: PaginatedResult<MessageDto[]>) => {
-
-
-              // var scrollTop = this.messageContainer.nativeElement.scrollTop;
-              // var oldHeight = this.messageContainer.nativeElement.scrollHeight;
 
               var $container = $(".message-container");
               var container = $container[0];
               var scrollTop = $container.scrollTop();
               var oldHeight = container.scrollHeight;
-              
-              // var oldHeight = this.messageContainer.nativeElement.scrollHeight;
-
 
               this.messages.unshift(...result.result);
 
               this.pageIndex = result.pagination.currentPage + 1;
-
-              // setTimeout(() => {
-              //   var diff = this.messageContainer.nativeElement.scrollHeight - oldHeight;
-              //   this.messageContainer.nativeElement.scrollTop = diff + scrollTop;
-              // });
 
 
               if (getBrowserName() == "chrome") {
@@ -126,7 +112,6 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
         }
         else if (this.messageContainer.nativeElement.scrollHeight - this.messageContainer.nativeElement.scrollTop <= this.messageContainer.nativeElement.clientHeight + 10) {
           this.chatState = ChatState.StickToBottom;
-          console.log("scrolled to down");
         }
         else {
           this.chatState = ChatState.Default;
@@ -158,4 +143,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
     } catch (err) { }
   }
 
+  CallUser() {
+    this.videoService.instantiateCall.next(this.otherUserId);
+  }
 }

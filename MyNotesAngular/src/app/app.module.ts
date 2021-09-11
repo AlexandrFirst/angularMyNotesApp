@@ -68,8 +68,8 @@ import { VideoCallComponent } from './mainContent/video-call/video-call.componen
     ])
   ],
   providers: [
-    MyErrorHandlerService,
-    { provide: ErrorHandler, useClass: MyErrorHandlerService },
+    // MyErrorHandlerService,
+    // { provide: ErrorHandler, useClass: MyErrorHandlerService },
     { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
   ],

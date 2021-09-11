@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Dish } from './core/script.js';
-import { add, less } from './controls/script.js';
+import { add, less, addMyVideoStream } from './controls/script.js';
 import { videoChatData } from 'src/app/Models/videoChatData.js';
 
 @Component({
@@ -8,7 +8,11 @@ import { videoChatData } from 'src/app/Models/videoChatData.js';
   templateUrl: './videochat.component.html',
   styleUrls: ['./videochat.component.scss',
     './controls/styles.css',
-    './core/styles.css']
+    './core/styles.css'],
+  host: {
+    '[style.visibility]': 'isVisible',
+  }
+
 })
 export class VideochatComponent implements OnInit {
 
@@ -16,20 +20,43 @@ export class VideochatComponent implements OnInit {
   isVideoOn = true;
   isAudio = true;
   currentCameraCount: number = 0;
+  isVisible: string = 'hidden'
+
+  myVideoChatData: videoChatData | undefined = undefined;
 
   @Input() set videoChatData(data: videoChatData) {
-    this.videoChatData = data;
 
-    for (let i = 0; i < this.currentCameraCount; i++) {
-      less();
-    }
-    this.currentCameraCount = 0;
+    console.log(data)
+    this.myVideoChatData = data;
 
-    for (let userId in data.connectionCount) {
-      add(data.RemoteVideoStreams[userId], data.RemoteAudioStreams[userId]);
-      this.currentCameraCount++;
+    if (this.myVideoChatData && this.myVideoChatData.connectionCount.length > 0) {
+      for (let i = 0; i < this.currentCameraCount; i++) {
+        less();
+        Dish();
+      }
+
+      this.currentCameraCount = 0;
+
+      if ( this.myVideoChatData.myVideoTrack ) {
+        addMyVideoStream( this.myVideoChatData.myVideoTrack);
+        Dish();
+        this.currentCameraCount++;
+      }
+
+
+      for (let userId in  this.myVideoChatData.connectionCount) {
+        add(data.RemoteVideoStreams[userId],  this.myVideoChatData.RemoteAudioStreams[userId]);
+        Dish();
+        this.currentCameraCount++;
+      }
+
+      if (this.currentCameraCount == 0) {
+        this.isVisible = 'hidden'
+      } else {
+        this.isVisible = 'visible'
+      }
+
     }
-    
   }
 
   constructor() { }
@@ -44,3 +71,4 @@ export class VideochatComponent implements OnInit {
   }
 
 }
+

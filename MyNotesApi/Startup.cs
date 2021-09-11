@@ -93,6 +93,7 @@ namespace MyNotesApi
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddSingleton<IActiveUserService, ActiveUserService>();
 
             services.AddControllers().AddNewtonsoftJson(o =>
             {

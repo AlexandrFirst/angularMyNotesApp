@@ -11,8 +11,6 @@ export function Dish() {
     let Cameras = document.getElementsByClassName('Camera');
     let max = 0;
 
-    console.log("here", Scenary, Width, Height, Cameras);
-
     // loop (i recommend you optimize this)
     let i = 1;
     while (i < 5000) {

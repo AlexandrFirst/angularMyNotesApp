@@ -4,6 +4,5 @@ export class videoChatData {
     public RemoteVideoStreams: MediaStream[];
     public RemoteAudioStreams: MediaStream[];
 
-    public myAudioTrack: any;
     public myVideoTrack: any;
 }

@@ -38,8 +38,6 @@ export class VideoCallComponent implements OnInit {
       urls: 'stun:stun2.l.google.com:19302'
     }, {
       urls: 'stun:stun3.l.google.com:19302'
-    }, {
-      urls: 'stun:stun4.l.google.com:19302'
     }]
   }
 
@@ -47,6 +45,10 @@ export class VideoCallComponent implements OnInit {
     private notificationService: NotificationService) { }
 
   ngOnInit() {
+
+    this.videoService.instantiateCall.subscribe((userId) => {
+      this.callInit(userId);
+    })
 
     this.videoService.getOffer().subscribe(async (offer: RTCMessage) => {
 
@@ -81,10 +83,13 @@ export class VideoCallComponent implements OnInit {
     })
 
     this.videoService.canAccessUserReponse().subscribe((fromUserId: number) => {
-      if (this.UserState == UserCallState.BeingCalled || UserCallState.Calling) {
+
+      console.log("Access user response")
+      if (this.UserState == UserCallState.BeingCalled || this.UserState == UserCallState.Calling) {
         this.videoService.sendAccessReponse(fromUserId, false);
       }
       else {
+        this.UserState = UserCallState.BeingCalled
         this.videoService.askUserToAccept().subscribe(data => {
           this.videoService.sendAccessReponse(fromUserId, data);
         })
@@ -93,6 +98,7 @@ export class VideoCallComponent implements OnInit {
     })
 
     this.videoService.listenToDeclineCall().subscribe(() => {
+      console.log("Call is declined")
       this.UserState = UserCallState.Idle;
     })
 
@@ -103,15 +109,14 @@ export class VideoCallComponent implements OnInit {
     if (this.UserState == UserCallState.Idle) {
       this.UserState = UserCallState.Calling
 
-      this.processMedia();
-      this.createConnection(userId);
-
       this.videoService.canAccessUserRequest(userId).subscribe((accessResponseMesage: AccessResponseMessage) => {
         if (!accessResponseMesage.canAccess) {
+          console.log("Can't access user")
           this.UserState = UserCallState.Idle;
           return;
         }
         else {
+          this.processMedia();
           this.createConnection(userId);
         }
       })
@@ -229,10 +234,9 @@ export class VideoCallComponent implements OnInit {
     }
 
     this.videoChatData = {
-      RemoteAudioStreams : this.RemoteAudioStreams,
+      RemoteAudioStreams: this.RemoteAudioStreams,
       RemoteVideoStreams: this.RemoteVideoStreams,
-      connectionCount: this.RTCConnections,
-      myAudioTrack: this.myAudioTrack,
+      connectionCount: (this.audioRtpSenders.length > this.videoRtpSenders.length ? this.audioRtpSenders : this.videoRtpSenders),
       myVideoTrack: this.myVideoTrack
     }
   }

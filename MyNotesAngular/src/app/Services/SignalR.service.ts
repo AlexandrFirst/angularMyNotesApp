@@ -54,6 +54,7 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
   }
 
   sendToUserMessage(userId: number, message: string) {
+    console.log("Sending message to user")
     this.hubConnection.invoke("SendMessageToUser", userId, message);
   }
 

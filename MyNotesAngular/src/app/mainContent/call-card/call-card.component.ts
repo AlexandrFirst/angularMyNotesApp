@@ -17,12 +17,19 @@ export class CallCardComponent implements OnInit {
   @Input() userName: string = null;
 
   private isVisible: string = 'hidden';
-  private userState: UserCallState = UserCallState.Idle;
 
   @Input() set UserState(value: UserCallState) {
-    this.userState = value;
-    if (this.userState == (UserCallState.BeingCalled || UserCallState.Calling)) {
+    if (value == UserCallState.Calling || value == UserCallState.BeingCalled) {
+      console.log("Calling card calling")
+
       this.isVisible = 'visible';
+      
+      if (value == UserCallState.Calling) {
+        this.isInputCall = false;
+      }
+      else if (value == UserCallState.BeingCalled) {
+        this.isInputCall = true;
+      }
     } else {
       this.isVisible = 'hidden';
     }

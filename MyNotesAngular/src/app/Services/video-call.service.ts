@@ -21,8 +21,8 @@ export class VideoCallService {
   }
 
   getIceCandiadate() {
-    return this.webrtcService.receiveICECandidate().pipe(map((offer: string) => {
-      return JSON.parse(offer) as RTCMessage;
+    return this.webrtcService.receiveICECandidate().pipe(map((icecandidate: RTCMessage) => {
+      return icecandidate;
     }));
   }
 
@@ -31,8 +31,8 @@ export class VideoCallService {
   }
 
   getOffer() {
-    return this.webrtcService.receiveOffer().pipe(map((offer: string) => {
-      return JSON.parse(offer) as RTCMessage;
+    return this.webrtcService.receiveOffer().pipe(map((offer: RTCMessage) => {
+      return offer;
     }));
   }
 
@@ -42,7 +42,8 @@ export class VideoCallService {
 
   getAnswer() {
     return this.webrtcService.receiveAnswer().pipe(map((offer: string) => {
-      return JSON.parse(offer) as RTCMessage;
+      let obj = offer
+      return obj as unknown as RTCMessage;
     }));
   }
 

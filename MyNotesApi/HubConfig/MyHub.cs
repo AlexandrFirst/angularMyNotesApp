@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using MyNotesApi.Helpers;
+using MyNotesApi.Models;
 using MyNotesApi.ServiceProtos;
 
 namespace MyNotesApi.HubConfig
@@ -47,17 +48,29 @@ namespace MyNotesApi.HubConfig
 
         public async Task sendICECandiate(int userId, string iceCandidateData)
         {
-            await Clients.Group(userId.ToString()).SendAsync("receiveICECandidate", iceCandidateData);
+            await Clients.Group(userId.ToString()).SendAsync("receiveICECandidate", new WebRtcMessage()
+            {
+                fromUserId = userContext.GetUserContext().Id,
+                data = iceCandidateData
+            });
         }
 
         public async Task sendOffer(int userId, string offerData)
         {
-            await Clients.Group(userId.ToString()).SendAsync("receiveOffer", offerData);
+            await Clients.Group(userId.ToString()).SendAsync("receiveOffer", new WebRtcMessage()
+            {
+                fromUserId = userContext.GetUserContext().Id,
+                data = offerData
+            });
         }
 
         public async Task sendAnswer(int userId, string answer)
         {
-            await Clients.Group(userId.ToString()).SendAsync("receiveAnswer", answer);
+            await Clients.Group(userId.ToString()).SendAsync("receiveAnswer", new WebRtcMessage()
+            {
+                fromUserId = userContext.GetUserContext().Id,
+                data = answer
+            });
         }
 
         public async Task accessRequest(int toUserId)

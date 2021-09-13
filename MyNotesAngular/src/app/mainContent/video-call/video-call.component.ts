@@ -52,22 +52,22 @@ export class VideoCallComponent implements OnInit {
 
     this.videoService.getOffer().subscribe(async (offer: RTCMessage) => {
 
-      offer = JSON.parse(offer.data);
+      console.log("from video component in getOffer(): ", offer)
 
       if (!this.RTCConnections[offer.fromUserId]) {
         await this.createConnection(offer.fromUserId);
       }
 
-      await this.RTCConnections[offer.fromUserId].setRemoteDescription(new RTCSessionDescription(offer.data));
+      console.log("Remote description data: ", JSON.parse(offer.data))
+
+      await this.RTCConnections[offer.fromUserId].setRemoteDescription(new RTCSessionDescription(JSON.parse(offer.data)));
       var answer = await this.RTCConnections[offer.fromUserId].createAnswer();
       await this.RTCConnections[offer.fromUserId].setLocalDescription(answer);
-
+      console.log(this.RTCConnections)
       this.videoService.sendAnswer(offer.fromUserId, JSON.stringify(answer));
     })
 
-    this.videoService.getAnswer().subscribe(async (answer: RTCMessage) => {
-      await this.RTCConnections[answer.fromUserId].setRemoteDescription(new RTCSessionDescription(answer.data));
-    })
+   
 
 
     this.videoService.getIceCandiadate().subscribe(async (icecandidate: RTCMessage) => {
@@ -76,7 +76,7 @@ export class VideoCallComponent implements OnInit {
       }
 
       try {
-        await this.RTCConnections[icecandidate.fromUserId].addIceCandidate(icecandidate.data);
+        await this.RTCConnections[icecandidate.fromUserId].addIceCandidate(JSON.parse(icecandidate.data));
       } catch (e) {
         console.log(e);
       }
@@ -121,6 +121,11 @@ export class VideoCallComponent implements OnInit {
         }
       })
 
+      this.videoService.getAnswer().subscribe(async (answer: RTCMessage) => {
+        console.log(this.RTCConnections);
+        await this.RTCConnections[answer.fromUserId].setRemoteDescription(new RTCSessionDescription(JSON.parse(answer.data)));
+      })
+
       this.videoService.askUserToAccept().subscribe(data => {
         this.UserState = UserCallState.Idle
 
@@ -132,20 +137,24 @@ export class VideoCallComponent implements OnInit {
   }
 
   async createConnection(userId) {
+    console.log("Connection is creating")
     let webRTCConnection = new RTCPeerConnection(this.iceConfig);
     this.RTCConnections[userId] = webRTCConnection;
 
     webRTCConnection.onicecandidate = (event) => {
+      console.log("local user want to send ice candidate")
       if (event.candidate) {
         this.videoService.iceCandidateSend(userId, JSON.stringify(event.candidate));
       }
     }
 
     webRTCConnection.onnegotiationneeded = async () => {
+      console.log("local user created offer")
       await this.createOffer(userId);
     }
 
     webRTCConnection.ontrack = async (event: RTCTrackEvent) => {
+      console.log("Remote peer added track")
       if (!this.RemoteVideoStreams[userId]) {
         this.RemoteVideoStreams[userId] = new MediaStream();
       }

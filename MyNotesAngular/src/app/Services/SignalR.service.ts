@@ -3,6 +3,7 @@ import * as signalR from '@aspnet/signalr'
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserData } from '../Models/AuthResponse';
+import { RTCMessage } from '../Models/RTCMessage';
 import { ISignalRMessageService } from './Abstartions/ISignalRMessageService';
 import { AccessResponseMessage, ISignalRWEBRtcService } from './Abstartions/ISignalRWEBRtcService';
 
@@ -62,9 +63,9 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
     this.hubConnection.invoke("sendICECandiate", userId, iceCandidateData);
   }
 
-  receiveICECandidate(): Observable<string> {
+  receiveICECandidate(): Observable<RTCMessage> {
     return new Observable(observer => {
-      this.hubConnection.on("receiveICECandidate", (otherPeerICECandidate: string) => {
+      this.hubConnection.on("receiveICECandidate", (otherPeerICECandidate: RTCMessage) => {
         console.log("receiving other peer ice candidate");
         observer.next(otherPeerICECandidate);
       });
@@ -75,9 +76,9 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
     this.hubConnection.invoke("sendOffer", userId, offerData);
   }
 
-  receiveOffer(): Observable<string> {
+  receiveOffer(): Observable<RTCMessage> {
     return new Observable(observer => {
-      this.hubConnection.on("receiveOffer", (offerData: string) => {
+      this.hubConnection.on("receiveOffer", (offerData: RTCMessage) => {
         console.log("receiving offer from other user");
         observer.next(offerData);
       });

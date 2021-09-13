@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { RTCMessage } from '../Models/RTCMessage';
 import { AccessResponseMessage, ISignalRWEBRtcService } from './Abstartions/ISignalRWEBRtcService';
 import { SignalRProvider } from './Providers/SignalRProvider';
 
@@ -8,8 +9,8 @@ import { SignalRProvider } from './Providers/SignalRProvider';
 })
 export class WebRTCService {
 
-  private iceCandidateListening = new Subject<string>();
-  private offerListening = new Subject<string>();
+  private iceCandidateListening = new Subject<RTCMessage>();
+  private offerListening = new Subject<RTCMessage>();
   private answerListening = new Subject<string>();
   private accessCallListening = new Subject<number>();
   private reponseCallListening = new Subject<AccessResponseMessage>();
@@ -35,7 +36,7 @@ export class WebRTCService {
     this.signallingServer.sendSdpAnswer(userId, answer);
   }
 
-  receiveICECandidate(): Observable<string> {
+  receiveICECandidate(): Observable<RTCMessage> {
     this.signallingServer.receiveICECandidate().subscribe(iceCandidateData => {
       this.iceCandidateListening.next(iceCandidateData)
     });
@@ -43,7 +44,7 @@ export class WebRTCService {
     return this.iceCandidateListening.asObservable();
   }
 
-  receiveOffer(): Observable<string> {
+  receiveOffer(): Observable<RTCMessage> {
     this.signallingServer.receiveOffer().subscribe(offer => {
       this.offerListening.next(offer)
     });
@@ -52,7 +53,7 @@ export class WebRTCService {
   }
 
   receiveAnswer(): Observable<string> {
-    this.signallingServer.receiveOffer().subscribe(answer => {
+    this.signallingServer.receiveAnswer().subscribe(answer => {
       this.answerListening.next(answer)
     });
 

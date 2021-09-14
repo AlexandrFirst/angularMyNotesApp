@@ -47,24 +47,23 @@ export class VideoCallComponent implements OnInit {
   ngOnInit() {
 
     this.videoService.instantiateCall.subscribe((userId) => {
+
       this.callInit(userId);
     })
 
     this.videoService.getOffer().subscribe(async (offer: RTCMessage) => {
 
-      console.log("from video component in getOffer(): ", offer)
 
       if (!this.RTCConnections[offer.fromUserId]) {
         await this.createConnection(offer.fromUserId);
       }
 
-      console.log("Remote description data: ", JSON.parse(offer.data))
-
       await this.RTCConnections[offer.fromUserId].setRemoteDescription(new RTCSessionDescription(JSON.parse(offer.data)));
       var answer = await this.RTCConnections[offer.fromUserId].createAnswer();
       await this.RTCConnections[offer.fromUserId].setLocalDescription(answer);
-      console.log(this.RTCConnections)
+
       this.videoService.sendAnswer(offer.fromUserId, JSON.stringify(answer));
+      this.processMedia();
     })
 
    
@@ -83,8 +82,6 @@ export class VideoCallComponent implements OnInit {
     })
 
     this.videoService.canAccessUserReponse().subscribe((fromUserId: number) => {
-
-      console.log("Access user response")
       if (this.UserState == UserCallState.BeingCalled || this.UserState == UserCallState.Calling) {
         this.videoService.sendAccessReponse(fromUserId, false);
       }
@@ -108,7 +105,7 @@ export class VideoCallComponent implements OnInit {
 
     if (this.UserState == UserCallState.Idle) {
       this.UserState = UserCallState.Calling
-
+      this.processMedia();
       this.videoService.canAccessUserRequest(userId).subscribe((accessResponseMesage: AccessResponseMessage) => {
         if (!accessResponseMesage.canAccess) {
           console.log("Can't access user")
@@ -116,14 +113,14 @@ export class VideoCallComponent implements OnInit {
           return;
         }
         else {
-          this.processMedia();
+
           this.createConnection(userId);
         }
       })
 
       this.videoService.getAnswer().subscribe(async (answer: RTCMessage) => {
-        console.log(this.RTCConnections);
         await this.RTCConnections[answer.fromUserId].setRemoteDescription(new RTCSessionDescription(JSON.parse(answer.data)));
+       
       })
 
       this.videoService.askUserToAccept().subscribe(data => {
@@ -137,24 +134,22 @@ export class VideoCallComponent implements OnInit {
   }
 
   async createConnection(userId) {
-    console.log("Connection is creating")
+    
     let webRTCConnection = new RTCPeerConnection(this.iceConfig);
     this.RTCConnections[userId] = webRTCConnection;
 
     webRTCConnection.onicecandidate = (event) => {
-      console.log("local user want to send ice candidate")
       if (event.candidate) {
         this.videoService.iceCandidateSend(userId, JSON.stringify(event.candidate));
       }
     }
 
     webRTCConnection.onnegotiationneeded = async () => {
-      console.log("local user created offer")
       await this.createOffer(userId);
     }
 
     webRTCConnection.ontrack = async (event: RTCTrackEvent) => {
-      console.log("Remote peer added track")
+      console.log("Remote peer added track: ", event)
       if (!this.RemoteVideoStreams[userId]) {
         this.RemoteVideoStreams[userId] = new MediaStream();
       }
@@ -178,6 +173,7 @@ export class VideoCallComponent implements OnInit {
     webRTCConnection.onconnectionstatechange = (event) => {
       switch (webRTCConnection.connectionState) {
         case "connected":
+
           this.UserState == UserCallState.Idle
           break;
       }
@@ -199,6 +195,7 @@ export class VideoCallComponent implements OnInit {
 
 
   async processMedia() {
+    console.log("Media is processed")
     try {
       var vstream = null;
       vstream = await navigator.mediaDevices.getUserMedia({
@@ -230,6 +227,7 @@ export class VideoCallComponent implements OnInit {
 
   updateMediaSenders(track, rtpSenders) {
     for (var userId in this.RTCConnections) {
+      console.log("Update media sender: userID " , userId)
       var connections = this.RTCConnections[userId];
       if (connections && (connections.connectionState == "new" ||
         connections.connectionState == "connecting" ||

@@ -9,7 +9,6 @@ import { WebRTCService } from './webRTC.service';
 })
 export class VideoCallService {
 
-  userDecision: Subject<boolean> = new Subject();
   instantiateCall: Subject<number> = new Subject();
 
   constructor(private webrtcService: WebRTCService) {
@@ -52,16 +51,12 @@ export class VideoCallService {
     return this.webrtcService.receiveAccessResponse();
   }
 
-  canAccessUserReponse() {
+  canAccessUserResponse() {
     return this.webrtcService.receiveAccessRequest();
   }
 
-  sendAccessReponse(userId, canAccess) {
+  sendAccessResponse(userId, canAccess) {
     this.webrtcService.sendAccessResponse(userId, canAccess);
-  }
-
-  askUserToAccept() {
-    return this.userDecision.asObservable();
   }
 
   declineCall(userId) {

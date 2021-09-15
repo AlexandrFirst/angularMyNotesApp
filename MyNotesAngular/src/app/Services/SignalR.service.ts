@@ -115,7 +115,8 @@ export class SignalRService implements ISignalRMessageService, ISignalRWEBRtcSer
   }
   receiveAccessResponse(): Observable<AccessResponseMessage> {
     return new Observable(observer => {
-      this.hubConnection.on("reciveAccessResponse", (response: AccessResponseMessage) => {
+      this.hubConnection.on("reciveAccessResponse", (response) => {
+        console.log("access reposne: ", response)
         observer.next(response)
       })
     })

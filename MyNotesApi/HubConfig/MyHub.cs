@@ -84,13 +84,13 @@ namespace MyNotesApi.HubConfig
             }
             else
             {
-                await Clients.Group(toUserId.ToString()).SendAsync("reciveAccessRequest", toUserId);
+                await Clients.Group(toUserId.ToString()).SendAsync("reciveAccessRequest", userContext.GetUserContext().Id);
             }
         }
 
         public async Task accessResponse(int toUserId, bool canAccess)
         {
-            await Clients.Group(toUserId.ToString()).SendAsync("reciveAccessResponse", new { fromUserId = toUserId, canAccess = canAccess });
+            await Clients.Group(toUserId.ToString()).SendAsync("reciveAccessResponse", new { fromUserId = userContext.GetUserContext().Id, canAccess = canAccess });
         }
 
         public async Task declineCall(int userId)

@@ -1,2 +1,2 @@
 <app-videochat [videoChatData]="videoChatData"></app-videochat>
-<app-call-card [UserState]="UserState"></app-call-card>
+<app-call-card [UserState]="UserState" (CallCallback) = "CallCallback($event)"></app-call-card>

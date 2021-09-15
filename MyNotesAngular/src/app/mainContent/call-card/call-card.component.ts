@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserCallState } from 'src/app/Models/RTCMessage';
 import { VideoCallService } from 'src/app/Services/video-call.service';
+
 
 @Component({
   selector: 'app-call-card',
@@ -16,6 +17,8 @@ export class CallCardComponent implements OnInit {
   @Input() userPhotoUrl: string = null;
   @Input() userName: string = null;
 
+  @Output() CallCallback: EventEmitter<boolean> = new EventEmitter()
+
   private isVisible: string = 'hidden';
 
   @Input() set UserState(value: UserCallState) {
@@ -23,7 +26,7 @@ export class CallCardComponent implements OnInit {
       console.log("Calling card calling")
 
       this.isVisible = 'visible';
-      
+
       if (value == UserCallState.Calling) {
         this.isInputCall = false;
       }
@@ -42,11 +45,12 @@ export class CallCardComponent implements OnInit {
   }
 
   acceptCall() {
-    this.videoService.userDecision.next(true)
+    this.CallCallback.emit(true)
   }
 
   declineCall() {
-    this.videoService.userDecision.next(false)
+
+    this.CallCallback.emit(false)
   }
 
 }
